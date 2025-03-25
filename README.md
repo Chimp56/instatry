@@ -101,3 +101,11 @@ More authentic marketplace
 AR try-ons and uploading  
 
 Bridge AI and Fashion. 
+
+
+
+AI Image detection and verification
+
+Hugging Face
+
+Login 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

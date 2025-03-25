@@ -1,0 +1,5 @@
+from ninja import Router
+from typing import List
+from src.service.ai_image_detector_service import AIImageDetectorService
+from src.schema.ai_image_detector_schema import ImageDetectionSchema
+from src.schema.ai_image_detector_schema import ImageDetectionResponseSchema
