@@ -141,3 +141,9 @@ This project is licensed under the MIT License.
 ## ❓ Need Help?
 Feel free to open an issue or reach out to the maintainers.
 
+
+##
+cd backend
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py runserver
