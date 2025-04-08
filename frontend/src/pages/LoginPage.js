@@ -1,6 +1,7 @@
-// src/pages/LoginPage.js
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import AuthForm from '../components/AuthForm';
+import logo from '../data/assets/logo.png'; 
+import '../styles/authStyles.css';
 
 const LoginPage = ({ onLogin }) => {
   const [username, setUsername] = useState("");
@@ -8,50 +9,52 @@ const LoginPage = ({ onLogin }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Simulate login (hook up to backend later)
     console.log("Logging in:", username);
     onLogin(username);
   };
 
   return (
-    <div style={{ padding: "2rem", maxWidth: "400px", margin: "0 auto" }}>
-      <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: "1rem" }}>
-          <label htmlFor="username">Username:</label>
+    <AuthForm
+      logo={logo}
+      title="Login"
+      footerText="Don't have an account?"
+      footerLinkText="Sign Up"
+      footerLinkPath="/signup"
+    >
+      <form onSubmit={handleSubmit} className="auth-form">
+        <div className="form-group">
+          <label htmlFor="username" className="form-label">
+            Username:
+          </label>
           <input
             id="username"
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
-            style={{ width: "100%", padding: "0.5rem" }}
+            className="form-input"
           />
         </div>
-        <div style={{ marginBottom: "1rem" }}>
-          <label htmlFor="password">Password:</label>
+        
+        <div className="form-group">
+          <label htmlFor="password" className="form-label">
+            Password:
+          </label>
           <input
             id="password"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            style={{ width: "100%", padding: "0.5rem" }}
+            className="form-input"
           />
         </div>
-        <button type="submit" style={{ padding: "0.5rem 1rem" }}>
+        
+        <button type="submit" className="auth-button">
           Login
         </button>
       </form>
-      <div style={{ marginTop: "1rem" }}>
-        <p>
-          Don't have an account?{" "}
-          <Link to="/signup" style={{ textDecoration: "underline" }}>
-            Sign Up
-          </Link>
-        </p>
-      </div>
-    </div>
+    </AuthForm>
   );
 };
 
