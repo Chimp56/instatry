@@ -3,6 +3,7 @@ import React, { useState, useContext } from "react";
 import { productsData } from "../data/products";
 import { CartContext } from "../context/CartContext";
 import ARTryOn3D from "../components/ARTryOn3D"; // Our AR try-on component
+import "../styles/Dashboard.css";
 
 const Dashboard = ({ onLogout }) => {
   const [products] = useState(productsData);
@@ -11,6 +12,7 @@ const Dashboard = ({ onLogout }) => {
 
   const handleAddToCart = (product) => {
     addToCart(product);
+    alert(`${product.name} added to cart!`);
   };
 
   const handleTryOn = (product) => {
@@ -22,34 +24,50 @@ const Dashboard = ({ onLogout }) => {
   };
 
   return (
-    <div style={{ padding: "1rem" }}>
-      <h1>InstaFit Dashboard</h1>
-      <button onClick={onLogout}>Logout</button>
-      <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
+    <div className="dashboard">
+      <div className="dashboard-header">
+        <h1>InstaFit Dashboard</h1>
+        <button className="logout-btn" onClick={onLogout}>
+          Logout
+        </button>
+      </div>
+
+      <div className="products-grid">
         {products.map((product) => (
-          <div
-            key={product.id}
-            style={{
-              border: "1px solid #ccc",
-              padding: "1rem",
-              width: "200px",
-              marginBottom: "1rem",
-            }}
-          >
-            <img
-              src={product.image}
-              alt={product.name}
-              style={{ width: "100%", height: "auto" }}
-            />
-            <h2>{product.name}</h2>
-            <p>${product.price}</p>
-            <div style={{ display: "flex", gap: "0.5rem" }}>
-              <button onClick={() => handleAddToCart(product)}>Add to Cart</button>
-              <button onClick={() => handleTryOn(product)}>Try On</button>
+          <div key={product.id} className="product-card">
+            <div className="product-image-container">
+              <img
+                src={product.image}
+                alt={product.description}
+                className="product-image"
+                onError={(e) => {
+                  e.target.onerror = null; 
+                  e.target.src = '/assets/logo.png';
+                }}
+              />
+            </div>
+            <div className="product-info">
+              <h2 className="product-name">{product.name}</h2>
+              <p className="product-price">${product.price}</p>
+              <div className="product-actions">
+                <button
+                  className="action-btn add-to-cart"
+                  onClick={() => handleAddToCart(product)}
+                >
+                  Add to Cart
+                </button>
+                <button
+                  className="action-btn try-on"
+                  onClick={() => handleTryOn(product)}
+                >
+                  Try On
+                </button>
+              </div>
             </div>
           </div>
         ))}
       </div>
+
       {/* Render AR try-on if a product is selected */}
       {selectedProduct && (
         <ARTryOn3D product={selectedProduct} onClose={handleCloseAR} />

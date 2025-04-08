@@ -6,6 +6,7 @@ export const productsData = [
     image: "/assets/redshirt.png", // Image in public/assets
     overlayModel: "/models/red_t_shirt.gltf", // 3D model in public/models
     description: "A stylish red t-shirt.",
+    category: "Top"
   },
   {
     id: 2,
@@ -14,6 +15,7 @@ export const productsData = [
     image: "/assets/wizard_hat.png",
     overlayModel: "/models/wizards_hat_gltf/scene.gltf",
     description: "A magical wizard hat.",
+    category: "Accessory"
   },
   {
     id: 3,
@@ -22,5 +24,6 @@ export const productsData = [
     image: "/assets/victorian_dress.png",
     overlayModel: "/models/victorian_dress/scene.gltf",
     description: "A beautiful Victorian dress.",
+    category: "Dress"
   },
 ];
