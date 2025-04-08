@@ -1,69 +1,87 @@
-// src/pages/SignupPage.js
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import AuthForm from '../components/AuthForm';
+import logo from '../data/assets/logo.png'; 
+import '../styles/authStyles.css';
 
 const SignupPage = ({ onSignup }) => {
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [formData, setFormData] = useState({
+    username: '',
+    email: '',
+    password: ''
+  });
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Simulate signup (hook up to backend later)
-    console.log("Signing up:", username, email);
-    onSignup(username);
+    console.log("Signing up:", formData);
+    onSignup(formData.username);
+  };
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
   };
 
   return (
-    <div style={{ padding: "2rem", maxWidth: "400px", margin: "0 auto" }}>
-      <h2>Sign Up</h2>
+    <AuthForm
+      logo={logo}
+      title="Create Account"
+      footerText="Already have an account?"
+      footerLinkText="Login"
+      footerLinkPath="/login"
+    >
       <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: "1rem" }}>
-          <label htmlFor="username">Username:</label>
+        <div className="form-group">
+          <label htmlFor="username" className="form-label">
+            Username:
+          </label>
           <input
             id="username"
+            name="username"
             type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            value={formData.username}
+            onChange={handleChange}
             required
-            style={{ width: "100%", padding: "0.5rem" }}
+            className="form-input"
           />
         </div>
-        <div style={{ marginBottom: "1rem" }}>
-          <label htmlFor="email">Email:</label>
+
+        <div className="form-group">
+          <label htmlFor="email" className="form-label">
+            Email:
+          </label>
           <input
             id="email"
+            name="email"
             type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={formData.email}
+            onChange={handleChange}
             required
-            style={{ width: "100%", padding: "0.5rem" }}
+            className="form-input"
           />
         </div>
-        <div style={{ marginBottom: "1rem" }}>
-          <label htmlFor="password">Password:</label>
+
+        <div className="form-group">
+          <label htmlFor="password" className="form-label">
+            Password:
+          </label>
           <input
             id="password"
+            name="password"
             type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={formData.password}
+            onChange={handleChange}
             required
-            style={{ width: "100%", padding: "0.5rem" }}
+            className="form-input"
           />
         </div>
-        <button type="submit" style={{ padding: "0.5rem 1rem" }}>
+
+        <button type="submit" className="auth-button">
           Sign Up
         </button>
       </form>
-      <div style={{ marginTop: "1rem" }}>
-        <p>
-          Already have an account?{" "}
-          <Link to="/login" style={{ textDecoration: "underline" }}>
-            Login
-          </Link>
-        </p>
-      </div>
-    </div>
+    </AuthForm>
   );
 };
 
