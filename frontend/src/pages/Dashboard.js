@@ -1,5 +1,5 @@
 // src/pages/Dashboard.js
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useMemo, useEffect } from "react";
 import { productsData } from "../data/products";
 import { CartContext } from "../context/CartContext";
 import ARTryOn3D from "../components/ARTryOn3D"; // Our AR try-on component
@@ -9,6 +9,23 @@ const Dashboard = ({ onLogout }) => {
   const [products] = useState(productsData);
   const { addToCart } = useContext(CartContext);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  // Debounce the search input
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setSearchTerm(searchTerm);
+    }, 300); // 300ms delay
+
+    return () => clearTimeout(timer);
+  }, [searchTerm]);
+  
+  // Filter products based on search term
+  const filteredProducts = useMemo(() => {
+    return products.filter(product => 
+      product.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, [products, searchTerm]);
 
   const handleAddToCart = (product) => {
     addToCart(product);
@@ -25,15 +42,32 @@ const Dashboard = ({ onLogout }) => {
 
   return (
     <div className="dashboard">
-      <div className="dashboard-header">
-        <h1>InstaFit Dashboard</h1>
-        <button className="logout-btn" onClick={onLogout}>
-          Logout
-        </button>
+      {/* Hero Section with Background Image */}
+      <div className="dashboard-hero">
+        <h1 className="dashboard-title">InstaFit: Your Fashion Marketplace</h1>
+        <div className="search-container">
+          <input
+            type="text"
+            placeholder="Search items..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="search-input"
+          />
+          {searchTerm && (
+            <button 
+              onClick={() => setSearchTerm("")}
+              className="clear-search-btn"
+            >
+              ×
+            </button>
+          )}
+        </div>
       </div>
+      
 
+  
       <div className="products-grid">
-        {products.map((product) => (
+        {filteredProducts.map((product) => (
           <div key={product.id} className="product-card">
             <div className="product-image-container">
               <img
