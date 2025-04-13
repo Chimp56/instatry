@@ -20,30 +20,68 @@ const CartPage = ({ username }) => {
     }
   }, [username]);
 
-  const addToCart = async (productId, quantity = 1) => {
+  const incrementQuantity = async (productId) => {
+    const updatedCart = cartItems.map((item) =>
+      item.product === productId
+        ? { ...item, quantity: item.quantity + 1 }
+        : item
+    );
+    setCartItems(updatedCart); // Optimistically update the cart
+
     try {
-      const cart = await addToCartAPI(username, productId, quantity);
-      setCartItems(cart.items);
+      const cart = await addToCartAPI(username, productId, 1);
+      setCartItems(cart.items); // Update with the server response
     } catch (error) {
-      console.error("Error adding to cart:", error);
+      console.error("Error incrementing quantity:", error);
+      setCartItems(cartItems); // Revert to the previous state if the API call fails
+    }
+  };
+
+  const decrementQuantity = async (productId) => {
+    const item = cartItems.find((item) => item.product === productId);
+    if (item.quantity > 1) {
+      const updatedCart = cartItems.map((item) =>
+        item.product === productId
+          ? { ...item, quantity: item.quantity - 1 }
+          : item
+      );
+      setCartItems(updatedCart); // Optimistically update the cart
+
+      try {
+        const cart = await addToCartAPI(username, productId, -1);
+        setCartItems(cart.items); // Update with the server response
+      } catch (error) {
+        console.error("Error decrementing quantity:", error);
+        setCartItems(cartItems); // Revert to the previous state if the API call fails
+      }
+    } else {
+      console.warn("Cannot decrement quantity below 1");
     }
   };
 
   const removeFromCart = async (productId) => {
+    const updatedCart = cartItems.filter((item) => item.product !== productId);
+    setCartItems(updatedCart); // Optimistically update the cart
+
     try {
       const cart = await removeFromCartAPI(username, productId);
-      setCartItems(cart.items);
+      setCartItems(cart.items); // Update with the server response
     } catch (error) {
       console.error("Error removing from cart:", error);
+      setCartItems(cartItems); // Revert to the previous state if the API call fails
     }
   };
 
   const clearCart = async () => {
+    const previousCart = [...cartItems];
+    setCartItems([]); // Optimistically clear the cart
+
     try {
       const cart = await clearCartAPI(username);
-      setCartItems(cart.items);
+      setCartItems(cart.items); // Update with the server response
     } catch (error) {
       console.error("Error clearing cart:", error);
+      setCartItems(previousCart); // Revert to the previous state if the API call fails
     }
   };
 
@@ -59,6 +97,11 @@ const CartPage = ({ username }) => {
               <h2>{item.name}</h2>
               <p>Price: ${item.price.toFixed(2)}</p>
               <p>Quantity: {item.quantity}</p>
+
+              {/* Increment/Decrement Buttons */}
+              <button onClick={() => decrementQuantity(item.product)}>-</button>
+              <span style={{ margin: "0 0.5rem" }}>{item.quantity}</span>
+              <button onClick={() => incrementQuantity(item.product)}>+</button>
               <button onClick={() => removeFromCart(item.product)}>Remove</button>
             </div>
           ))}

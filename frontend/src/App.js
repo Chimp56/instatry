@@ -31,7 +31,7 @@ function App() {
     <Router>
       <Navbar user={user} onLogout={handleLogout} />
       <Routes>
-        <Route path="/" element={user ? <Dashboard onLogout={handleLogout} /> : <Navigate to="/login" />} />
+        <Route path="/" element={user ? <Dashboard onLogout={handleLogout} username={user}/> : <Navigate to="/login" />} />
         <Route path="/cart" element={user ? <CartPage username={user} /> : <Navigate to="/login" />} />
         <Route path="/sell" element={user ? <UploadARItem /> : <Navigate to="/login" />} />
         <Route path="/profile" element={user ? <UserProfile user={user} /> : <Navigate to="/login" />} />

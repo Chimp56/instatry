@@ -46,13 +46,21 @@ export const fetchCart = async (username) => {
 };
 
 export const addToCartAPI = async (username, productId, quantity) => {
+
+    console.log("Adding to cart:", { username, productId, quantity });
+    //   print the request body
+    console.log("Request body:", { username, product_id: productId, quantity });
+
   const response = await fetch(`${api}cart/add/`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ username, product_id: productId, quantity }),
   });
+
   if (!response.ok) throw new Error("Failed to add to cart");
-  return await response.json();
+  const data = await response.json();
+  console.log("Cart data:", data);
+  return data;
 };
 
 export const removeFromCartAPI = async (username, productId) => {
@@ -62,7 +70,9 @@ export const removeFromCartAPI = async (username, productId) => {
     body: JSON.stringify({ username, product_id: productId }),
   });
   if (!response.ok) throw new Error("Failed to remove from cart");
-  return await response.json();
+  const data = await response.json();
+  console.log("Cart data:", data);
+  return data;
 };
 
 export const clearCartAPI = async (username) => {
@@ -72,5 +82,7 @@ export const clearCartAPI = async (username) => {
     body: JSON.stringify({ username }),
   });
   if (!response.ok) throw new Error("Failed to clear cart");
-  return await response.json();
+  const data = await response.json();
+  console.log("Cart data:", data);
+  return data;
 };
