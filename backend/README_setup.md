@@ -145,6 +145,7 @@ Feel free to open an issue or reach out to the maintainers.
 ## quick set up
 cd backend
 pip install -r requirements.txt
+python manage.py makemigrations
 python manage.py migrate
 python manage.py runserver
-http://localhost:8000/docs
+http://localhost:8000/api/docs
