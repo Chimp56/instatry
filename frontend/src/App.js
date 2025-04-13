@@ -7,8 +7,7 @@ import CartPage from "./pages/CartPage";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import UploadARItem from "./pages/UploadARItem";
-import UserProfile from "./pages/UserProfile"; // New profile page
-import { CartProvider } from "./context/CartContext";
+import UserProfile from "./pages/UserProfile";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -29,19 +28,17 @@ function App() {
   };
 
   return (
-    <CartProvider>
-      <Router>
-        <Navbar user={user} onLogout={handleLogout} />
-        <Routes>
-          <Route path="/" element={user ? <Dashboard onLogout={handleLogout} /> : <Navigate to="/login" />} />
-          <Route path="/cart" element={user ? <CartPage /> : <Navigate to="/login" />} />
-          <Route path="/sell" element={user ? <UploadARItem /> : <Navigate to="/login" />} />
-          <Route path="/profile" element={user ? <UserProfile user={user} /> : <Navigate to="/login" />} />
-          <Route path="/login" element={user ? <Navigate to="/" /> : <LoginPage onLogin={handleLogin} />} />
-          <Route path="/signup" element={user ? <Navigate to="/" /> : <SignupPage onSignup={handleSignup} />} />
-        </Routes>
-      </Router>
-    </CartProvider>
+    <Router>
+      <Navbar user={user} onLogout={handleLogout} />
+      <Routes>
+        <Route path="/" element={user ? <Dashboard onLogout={handleLogout} username={user}/> : <Navigate to="/login" />} />
+        <Route path="/cart" element={user ? <CartPage username={user} /> : <Navigate to="/login" />} />
+        <Route path="/sell" element={user ? <UploadARItem /> : <Navigate to="/login" />} />
+        <Route path="/profile" element={user ? <UserProfile user={user} /> : <Navigate to="/login" />} />
+        <Route path="/login" element={user ? <Navigate to="/" /> : <LoginPage onLogin={handleLogin} />} />
+        <Route path="/signup" element={user ? <Navigate to="/" /> : <SignupPage onSignup={handleSignup} />} />
+      </Routes>
+    </Router>
   );
 }
 

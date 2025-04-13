@@ -1,15 +1,13 @@
 // src/pages/Dashboard.js
-import React, { useState, useEffect, useContext, useMemo } from "react";
-import { CartContext } from "../context/CartContext";
+import React, { useState, useEffect, useMemo } from "react";
 import ARTryOn3D from "../components/ARTryOn3D";
 import SkeletonLoader from "../components/SkeletonLoader"; // Import SkeletonLoader
-import { fetchProducts, mediaURL } from "../api/api";
+import { fetchProducts, mediaURL, addToCartAPI } from "../api/api";
 import "../styles/Dashboard.css";
 
-const Dashboard = ({ onLogout }) => {
+const Dashboard = ({ onLogout, username }) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { addToCart } = useContext(CartContext);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -36,6 +34,15 @@ const Dashboard = ({ onLogout }) => {
       product.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
   }, [products, searchTerm]);
+
+  const addToCart = async (product) => {
+    try {
+      const response = await addToCartAPI(username, product.id, 1);
+      console.log("Product added to cart:", response);
+    } catch (error) {
+      console.error("Error adding product to cart:", error);
+    }
+  };
 
   const handleAddToCart = (product) => {
     addToCart(product);
