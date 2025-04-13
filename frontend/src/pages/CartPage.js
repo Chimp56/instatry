@@ -30,7 +30,6 @@ const CartPage = ({ username }) => {
 
     try {
       const cart = await addToCartAPI(username, productId, 1);
-      setCartItems(cart.items); // Update with the server response
     } catch (error) {
       console.error("Error incrementing quantity:", error);
       setCartItems(cartItems); // Revert to the previous state if the API call fails
@@ -49,7 +48,6 @@ const CartPage = ({ username }) => {
 
       try {
         const cart = await addToCartAPI(username, productId, -1);
-        setCartItems(cart.items); // Update with the server response
       } catch (error) {
         console.error("Error decrementing quantity:", error);
         setCartItems(cartItems); // Revert to the previous state if the API call fails
@@ -65,7 +63,6 @@ const CartPage = ({ username }) => {
 
     try {
       const cart = await removeFromCartAPI(username, productId);
-      setCartItems(cart.items); // Update with the server response
     } catch (error) {
       console.error("Error removing from cart:", error);
       setCartItems(cartItems); // Revert to the previous state if the API call fails
@@ -78,7 +75,6 @@ const CartPage = ({ username }) => {
 
     try {
       const cart = await clearCartAPI(username);
-      setCartItems(cart.items); // Update with the server response
     } catch (error) {
       console.error("Error clearing cart:", error);
       setCartItems(previousCart); // Revert to the previous state if the API call fails
