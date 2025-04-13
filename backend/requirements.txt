@@ -2,3 +2,6 @@ dj-database-url
 django-ninja
 django
 python-dotenv
+django-cors-headers
+requests
+psycopg2

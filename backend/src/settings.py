@@ -1,6 +1,8 @@
 import os
 import dj_database_url
 
+DEBUG = True
+
 ROOT_URLCONF = "src.urls"  # Change "src" to your actual project module name
 
 INSTALLED_APPS = [
@@ -10,6 +12,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "corsheaders",
 
     # Register your app
     "src.model",  # Ensure this is included
@@ -34,12 +37,15 @@ TEMPLATES = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",  # Required for sessions
+    'corsheaders.middleware.CorsMiddleware',
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",  # Required for authentication
     "django.contrib.messages.middleware.MessageMiddleware",  # Required for admin messages
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+CORS_ALLOW_ALL_ORIGINS = True
 
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost").split(",")
 
@@ -58,3 +64,12 @@ else:  # If running locally
     DATABASES = {
         "default": dj_database_url.config(default=os.getenv("DATABASE_URL"))
     }
+
+# Static and media file settings
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'file_storage', 'assets', 'products')
+
+print(f"MEDIA_ROOT: {MEDIA_ROOT}")
