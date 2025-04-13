@@ -1,4 +1,5 @@
 from pydantic import BaseModel, Field
+from typing import List, Optional
 
 class ProductCreateSchema(BaseModel):
     name: str = Field(..., max_length=255)
@@ -7,7 +8,7 @@ class ProductCreateSchema(BaseModel):
     image_filename: str = Field(..., max_length=255)
     overlay_model: str = Field(..., max_length=255)
     category: str = Field(..., max_length=255)
-    tags: list[str] = Field(default_factory=list)
+    tags: Optional[List[str]] = Field(default_factory=list)  # Optional field with default empty list
     class Config:
         orm_mode = True  # For ORM serialization
 

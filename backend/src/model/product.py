@@ -9,5 +9,12 @@ class Product(models.Model):
     image_filename = models.CharField(max_length=255)
     overlay_model = models.CharField(max_length=255, blank=True)
     category = models.CharField(max_length=255, blank=True)
-    tags = ArrayField(models.CharField(max_length=255), blank=True, default=list)
+    tags = ArrayField(
+        models.CharField(max_length=255),
+        blank=True,
+        null=True,  # Allow null values
+        default=list  # Default to an empty list
+    )
 
+    class Meta:
+        app_label = 'model'

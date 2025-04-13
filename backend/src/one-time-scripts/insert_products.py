@@ -48,7 +48,6 @@ def insert_products():
             "image_filename": "images/redshirt.png",  
             "overlay_model": "models/red_t_shirt.gltf",  
             "category": "Top",
-            "tags": ""
         },
         {
             "name": "Wizard Hat",
@@ -57,7 +56,6 @@ def insert_products():
             "image_filename": "images/wizard_hat.png",
             "overlay_model": "models/wizards_hat_gltf/scene.gltf",
             "category": "Accessory",
-            "tags": ""
         },
         {
             "name": "Victorian Dress",
@@ -66,14 +64,17 @@ def insert_products():
             "image_filename": "images/victorian_dress.png",
             "overlay_model": "models/victorian_dress/scene.gltf",
             "category": "Dress",
-            "tags": ""
         }
     ]
 
     for product in products_data:
         response = requests.post(url, headers=headers, data=json.dumps(product))
-        if response.status_code == 201:
+        print("request", response.request.body)
+        print("response", response.text)
+        if response.status_code == 200:
             print(f"Inserted product: {product['name']}")
         else:
             print(f"Failed to insert product: {product['name']}. Status code: {response.status_code}, Response: {response.text}")
-    
+
+if __name__ == "__main__":
+    insert_products()
