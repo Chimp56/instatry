@@ -28,38 +28,48 @@ export const fetchOverlayModel = async (modelPath) => {
   }
 };
 
-export const fetchCart = async () => {
-  const response = await fetch(`${api}cart/`, { credentials: "include" });
-  if (!response.ok) throw new Error("Failed to fetch cart");
-  return await response.json();
+export const fetchCart = async (username) => {
+  try {
+    console.log("Fetching cart for user:", username);
+    const response = await fetch(`${api}cart/?username=${username}`);
+    if (!response.ok) {
+      console.error("Failed to fetch cart:", response.statusText);
+      throw new Error("Failed to fetch cart");
+    }
+    const data = await response.json();
+    console.log("Cart data:", data);
+    return data;
+  } catch (error) {
+    console.error("Error in fetchCart:", error);
+    throw error;
+  }
 };
 
-export const addToCartAPI = async (productId, quantity) => {
+export const addToCartAPI = async (username, productId, quantity) => {
   const response = await fetch(`${api}cart/add/`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    credentials: "include",
-    body: JSON.stringify({ product_id: productId, quantity }),
+    body: JSON.stringify({ username, product_id: productId, quantity }),
   });
   if (!response.ok) throw new Error("Failed to add to cart");
   return await response.json();
 };
 
-export const removeFromCartAPI = async (productId) => {
+export const removeFromCartAPI = async (username, productId) => {
   const response = await fetch(`${api}cart/remove/`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    credentials: "include",
-    body: JSON.stringify({ product_id: productId }),
+    body: JSON.stringify({ username, product_id: productId }),
   });
   if (!response.ok) throw new Error("Failed to remove from cart");
   return await response.json();
 };
 
-export const clearCartAPI = async () => {
+export const clearCartAPI = async (username) => {
   const response = await fetch(`${api}cart/clear/`, {
     method: "POST",
-    credentials: "include",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ username }),
   });
   if (!response.ok) throw new Error("Failed to clear cart");
   return await response.json();

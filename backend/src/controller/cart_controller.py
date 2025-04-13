@@ -1,16 +1,17 @@
 from ninja import Router
-from django.shortcuts import get_object_or_404
-from src.model.cart import Cart, CartItem
-from src.model.product import Product
-from src.schema.cart_schema import CartItemSchema, CartResponseSchema
+from django.http import HttpResponseBadRequest, JsonResponse
+from src.service.cart_service import CartService
+from src.schema.cart_schema import CartResponseSchema, AddToCartSchema, RemoveFromCartSchema
 
 router = Router()
 
 @router.get("/", response=CartResponseSchema)
-def get_cart(request):
-    cart, _ = Cart.objects.get_or_create(user=request.user)
+def get_cart(request, username: str):
+    cart = CartService.get_cart(username)
+    if not cart:
+        return HttpResponseBadRequest("Cart not found for the given user")
     return {
-        "user": request.user.id,
+        "user": username,
         "items": [
             {
                 "product": item.product.id,
@@ -23,24 +24,16 @@ def get_cart(request):
     }
 
 @router.post("/add/", response=CartResponseSchema)
-def add_to_cart(request, product_id: int, quantity: int = 1):
-    cart, _ = Cart.objects.get_or_create(user=request.user)
-    product = get_object_or_404(Product, id=product_id)
-    cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
-    if not created:
-        cart_item.quantity += quantity
-    cart_item.save()
-    return get_cart(request)
+def add_to_cart(request, payload: AddToCartSchema):
+    cart = CartService.add_to_cart(payload.username, payload.product_id, payload.quantity)
+    return get_cart(request, username=payload.username)
 
 @router.post("/remove/", response=CartResponseSchema)
-def remove_from_cart(request, product_id: int):
-    cart = get_object_or_404(Cart, user=request.user)
-    cart_item = get_object_or_404(CartItem, cart=cart, product_id=product_id)
-    cart_item.delete()
-    return get_cart(request)
+def remove_from_cart(request, payload: RemoveFromCartSchema):
+    CartService.remove_from_cart(payload.username, payload.product_id)
+    return get_cart(request, username=payload.username)
 
 @router.post("/clear/", response=CartResponseSchema)
-def clear_cart(request):
-    cart = get_object_or_404(Cart, user=request.user)
-    cart.items.all().delete()
-    return get_cart(request)
+def clear_cart(request, username: str):
+    CartService.clear_cart(username)
+    return get_cart(request, username=username)

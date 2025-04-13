@@ -8,5 +8,14 @@ class CartItemSchema(BaseModel):
     quantity: int
 
 class CartResponseSchema(BaseModel):
-    user: int
+    user: str
     items: List[CartItemSchema]
+
+class AddToCartSchema(BaseModel):
+    username: str
+    product_id: int
+    quantity: int = 1
+
+class RemoveFromCartSchema(BaseModel):
+    username: str
+    product_id: int
