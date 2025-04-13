@@ -1,5 +1,5 @@
 // src/pages/CartPage.js
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { fetchCart, addToCartAPI, removeFromCartAPI, clearCartAPI } from "../api/api";
 
 const CartPage = ({ username }) => {
@@ -81,6 +81,16 @@ const CartPage = ({ username }) => {
     }
   };
 
+  // Calculate subtotal, shipping, tax, and total dynamically
+  const subtotal = useMemo(
+    () => cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0),
+    [cartItems]
+  );
+  const shipping = subtotal < 100 ? 6.99 : 0;
+  let taxRate = 0.0844;
+  const tax = useMemo(() => subtotal * taxRate, [subtotal, taxRate]);
+  const total = useMemo(() => subtotal + shipping + tax, [subtotal, shipping, tax]);
+
   return (
     <div style={{ padding: "1rem" }}>
       <h1>Shopping Cart</h1>
@@ -102,6 +112,12 @@ const CartPage = ({ username }) => {
             </div>
           ))}
           <hr />
+          <h3>Summary</h3>
+          <p>Subtotal: ${subtotal.toFixed(2)}</p>
+          <p>Shipping: ${shipping.toFixed(2)}</p>
+          <p>Tax: ${tax.toFixed(2)}</p>
+          <h2>Total: ${total.toFixed(2)}</h2>
+          <button>Checkout</button>
           <button onClick={clearCart}>Clear Cart</button>
         </>
       )}
