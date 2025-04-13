@@ -1,28 +1,33 @@
 // src/pages/Dashboard.js
-import React, { useState, useContext, useMemo, useEffect } from "react";
-import { productsData } from "../data/products";
+import React, { useState, useEffect, useContext, useMemo } from "react";
 import { CartContext } from "../context/CartContext";
-import ARTryOn3D from "../components/ARTryOn3D"; // Our AR try-on component
+import ARTryOn3D from "../components/ARTryOn3D";
+import { fetchProducts, mediaURL } from "../api/api";
 import "../styles/Dashboard.css";
 
 const Dashboard = ({ onLogout }) => {
-  const [products] = useState(productsData);
+  const [products, setProducts] = useState([]);
   const { addToCart } = useContext(CartContext);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
 
-  // Debounce the search input
+  // Fetch products from the API
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setSearchTerm(searchTerm);
-    }, 300); // 300ms delay
+    const loadProducts = async () => {
+      try {
+        const data = await fetchProducts();
+        setProducts(data);
+      } catch (error) {
+        console.error("Error loading products:", error);
+      }
+    };
 
-    return () => clearTimeout(timer);
+    loadProducts();
   }, [searchTerm]);
-  
+
   // Filter products based on search term
   const filteredProducts = useMemo(() => {
-    return products.filter(product => 
+    return products.filter((product) =>
       product.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
   }, [products, searchTerm]);
@@ -54,7 +59,7 @@ const Dashboard = ({ onLogout }) => {
             className="search-input"
           />
           {searchTerm && (
-            <button 
+            <button
               onClick={() => setSearchTerm("")}
               className="clear-search-btn"
             >
@@ -63,20 +68,18 @@ const Dashboard = ({ onLogout }) => {
           )}
         </div>
       </div>
-      
 
-  
       <div className="products-grid">
         {filteredProducts.map((product) => (
           <div key={product.id} className="product-card">
             <div className="product-image-container">
               <img
-                src={product.image}
+                src={`${mediaURL}${product.image_filename}`}
                 alt={product.description}
                 className="product-image"
                 onError={(e) => {
-                  e.target.onerror = null; 
-                  e.target.src = '/assets/logo.png';
+                  e.target.onerror = null;
+                  e.target.src = "/assets/logo.png";
                 }}
               />
             </div>
@@ -104,7 +107,7 @@ const Dashboard = ({ onLogout }) => {
 
       {/* Render AR try-on if a product is selected */}
       {selectedProduct && (
-        <ARTryOn3D product={selectedProduct} onClose={handleCloseAR} />
+        <ARTryOn3D product={selectedProduct} onClose={handleCloseAR} mediaURL={mediaURL} />
       )}
     </div>
   );

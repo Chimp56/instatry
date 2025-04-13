@@ -1,6 +1,6 @@
-python3 -m venv env
+python -m venv env
 source env/bin/activate
 
 pip install -r requirements.txt
-
-python3 manage.py runserver
+python manage.py migrate
+python manage.py runserver

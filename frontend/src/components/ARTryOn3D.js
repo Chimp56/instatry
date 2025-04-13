@@ -1,17 +1,15 @@
 // src/components/ARTryOn3D.js
 import React, { useRef, useEffect, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { useGLTF, Center } from "@react-three/drei";
+import { Center } from "@react-three/drei";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import * as tf from "@tensorflow/tfjs";
 import "@tensorflow/tfjs-backend-webgl";
 import * as poseDetection from "@tensorflow-models/pose-detection";
+import { mediaURL } from "../api/api"; 
 
 // --- GarmentModel Component ---
-// Dynamically positions and scales the 3D model based on detected pose,
-// using different logic for hats, dresses, or default (t-shirt).
-function GarmentModel({ overlayModelUrl, pose }) {
-  const { scene } = useGLTF(overlayModelUrl);
-  console.log("Loaded 3D scene from", overlayModelUrl, ":", scene);
+function GarmentModel({ overlayModelUrl, modelObject, pose }) {
   const modelRef = useRef();
 
   useFrame(() => {
@@ -57,39 +55,26 @@ function GarmentModel({ overlayModelUrl, pose }) {
       }
       // Default (e.g., T-Shirt): use shoulders.
       else {
-        const leftShoulder = pose.keypoints.find((kp) => kp.name === "left_shoulder");
-        const rightShoulder = pose.keypoints.find((kp) => kp.name === "right_shoulder");
-        if (leftShoulder && rightShoulder && leftShoulder.score > 0.5 && rightShoulder.score > 0.5) {
-          const midX = (leftShoulder.x + rightShoulder.x) / 2;
-          const midY = (leftShoulder.y + rightShoulder.y) / 2;
-          modelRef.current.position.x = (midX - 320) / 100;
-          modelRef.current.position.y = -((midY - 240) / 100);
-          const dx = leftShoulder.x - rightShoulder.x;
-          const distance = Math.sqrt(dx * dx);
-          const scaleFactor = distance / 50; // Adjust as needed.
-          modelRef.current.scale.set(scaleFactor, scaleFactor, scaleFactor);
+      const leftShoulder = pose.keypoints.find((kp) => kp.name === "left_shoulder");
+      const rightShoulder = pose.keypoints.find((kp) => kp.name === "right_shoulder");
+      if (leftShoulder && rightShoulder && leftShoulder.score > 0.5 && rightShoulder.score > 0.5) {
+        const midX = (leftShoulder.x + rightShoulder.x) / 2;
+        const midY = (leftShoulder.y + rightShoulder.y) / 2;
+        modelRef.current.position.x = (midX - 320) / 100;
+        modelRef.current.position.y = -((midY - 240) / 100);
+        const dx = leftShoulder.x - rightShoulder.x;
+        const distance = Math.sqrt(dx * dx);
+        const scaleFactor = distance / 50; // Adjust as needed
+        modelRef.current.scale.set(scaleFactor, scaleFactor, scaleFactor);
         }
       }
     }
   });
 
-  // Center the model within its bounding box.
   return (
     <Center>
-      <primitive ref={modelRef} object={scene} />
+      <primitive ref={modelRef} object={modelObject} />
     </Center>
-  );
-}
-
-// --- TestCube Component ---
-// A fallback red cube for testing purposes.
-function TestCube() {
-  useFrame(() => {}); // No dynamic updates.
-  return (
-    <mesh position={[0, 0, 0]}>
-      <boxGeometry args={[1, 1, 1]} />
-      <meshStandardMaterial color="red" />
-    </mesh>
   );
 }
 
@@ -99,8 +84,9 @@ const ARTryOn3D = ({ product, onClose }) => {
   const [detector, setDetector] = useState(null);
   const [pose, setPose] = useState(null);
   const [cameraActive, setCameraActive] = useState(false);
+  const [modelObject, setModelObject] = useState(null); // Store the loaded 3D object
 
-  // Initialize TensorFlow backend.
+  // Initialize TensorFlow backend
   useEffect(() => {
     const setupTF = async () => {
       await tf.ready();
@@ -110,7 +96,7 @@ const ARTryOn3D = ({ product, onClose }) => {
     setupTF();
   }, []);
 
-  // Initialize the MoveNet pose detector.
+  // Initialize the MoveNet pose detector
   useEffect(() => {
     const initDetector = async () => {
       const model = poseDetection.SupportedModels.MoveNet;
@@ -129,7 +115,29 @@ const ARTryOn3D = ({ product, onClose }) => {
     initDetector();
   }, []);
 
-  // Start the camera.
+  // Load the 3D model
+  useEffect(() => {
+    const loadModel = async () => {
+      if (product?.overlay_model) {
+        const loader = new GLTFLoader();
+        const modelUrl = `${mediaURL}${product.overlay_model}`; // Ensure the URL points to the backend
+        loader.load(
+          modelUrl,
+          (gltf) => {
+            setModelObject(gltf.scene); // Store the loaded 3D object
+            console.log("3D model loaded:", gltf.scene);
+          },
+          undefined,
+          (error) => {
+            console.error("Error loading 3D model:", error);
+          }
+        );
+      }
+    };
+    loadModel();
+  }, [product]);
+
+  // Start the camera
   useEffect(() => {
     const startCamera = async () => {
       try {
@@ -148,7 +156,7 @@ const ARTryOn3D = ({ product, onClose }) => {
     startCamera();
   }, []);
 
-  // Continuously detect pose.
+  // Continuously detect pose
   useEffect(() => {
     let animationFrameId;
     const detectPose = async () => {
@@ -169,7 +177,7 @@ const ARTryOn3D = ({ product, onClose }) => {
     return () => cancelAnimationFrame(animationFrameId);
   }, [detector, cameraActive]);
 
-  // Stop the camera.
+  // Stop the camera
   const stopCamera = () => {
     if (videoRef.current && videoRef.current.srcObject) {
       const tracks = videoRef.current.srcObject.getTracks();
@@ -222,10 +230,13 @@ const ARTryOn3D = ({ product, onClose }) => {
           >
             <ambientLight intensity={1} />
             <directionalLight position={[0, 5, 5]} intensity={0.8} />
-            {product?.overlayModel ? (
-              <GarmentModel overlayModelUrl={product.overlayModel} pose={pose} />
+            {modelObject ? (
+              <GarmentModel overlayModelUrl={product.overlay_model} modelObject={modelObject} pose={pose} />
             ) : (
-              <TestCube />
+              <mesh>
+                <boxGeometry args={[1, 1, 1]} />
+                <meshStandardMaterial color="red" />
+              </mesh>
             )}
           </Canvas>
         </div>
