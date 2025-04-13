@@ -31,7 +31,7 @@ const CartPage = () => {
           {cartItems.map((item) => (
             <div key={item.id} style={{ marginBottom: "1rem" }}>
               <h2>{item.name}</h2>
-              <p>Price: ${item.price.toFixed(2)}</p>
+              <p>Price: ${item.price}</p>
 
               {/* Increment/Decrement Buttons */}
               <button onClick={() => decrementQuantity(item.id)}>-</button>

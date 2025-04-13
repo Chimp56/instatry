@@ -27,3 +27,40 @@ export const fetchOverlayModel = async (modelPath) => {
     throw error;
   }
 };
+
+export const fetchCart = async () => {
+  const response = await fetch(`${api}cart/`, { credentials: "include" });
+  if (!response.ok) throw new Error("Failed to fetch cart");
+  return await response.json();
+};
+
+export const addToCartAPI = async (productId, quantity) => {
+  const response = await fetch(`${api}cart/add/`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify({ product_id: productId, quantity }),
+  });
+  if (!response.ok) throw new Error("Failed to add to cart");
+  return await response.json();
+};
+
+export const removeFromCartAPI = async (productId) => {
+  const response = await fetch(`${api}cart/remove/`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify({ product_id: productId }),
+  });
+  if (!response.ok) throw new Error("Failed to remove from cart");
+  return await response.json();
+};
+
+export const clearCartAPI = async () => {
+  const response = await fetch(`${api}cart/clear/`, {
+    method: "POST",
+    credentials: "include",
+  });
+  if (!response.ok) throw new Error("Failed to clear cart");
+  return await response.json();
+};

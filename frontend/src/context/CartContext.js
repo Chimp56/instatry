@@ -1,70 +1,53 @@
 // src/context/CartContext.js
-import React, { createContext, useState } from "react";
+import React, { createContext, useState, useEffect } from "react";
+import { fetchCart, addToCartAPI, removeFromCartAPI, clearCartAPI } from "../api/api";
 
 export const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
 
-  const addToCart = (product) => {
-    const existingItem = cartItems.find((item) => item.id === product.id);
-    if (existingItem) {
-      setCartItems((prev) =>
-        prev.map((item) =>
-          item.id === product.id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        )
-      );
-    } else {
-      setCartItems((prev) => [...prev, { ...product, quantity: 1 }]);
+  useEffect(() => {
+    const loadCart = async () => {
+      try {
+        const cart = await fetchCart();
+        setCartItems(cart.items);
+      } catch (error) {
+        console.error("Error loading cart:", error);
+      }
+    };
+    loadCart();
+  }, []);
+
+  const addToCart = async (productId, quantity = 1) => {
+    try {
+      const cart = await addToCartAPI(productId, quantity);
+      setCartItems(cart.items);
+    } catch (error) {
+      console.error("Error adding to cart:", error);
     }
   };
 
-  const removeFromCart = (productId) => {
-    setCartItems((prev) => prev.filter((item) => item.id !== productId));
+  const removeFromCart = async (productId) => {
+    try {
+      const cart = await removeFromCartAPI(productId);
+      setCartItems(cart.items);
+    } catch (error) {
+      console.error("Error removing from cart:", error);
+    }
   };
 
-  // 1) Increment quantity
-  const incrementQuantity = (productId) => {
-    setCartItems((prev) =>
-      prev.map((item) =>
-        item.id === productId
-          ? { ...item, quantity: item.quantity + 1 }
-          : item
-      )
-    );
-  };
-
-  // 2) Decrement quantity
-  const decrementQuantity = (productId) => {
-    setCartItems((prev) =>
-      prev.map((item) => {
-        if (item.id === productId) {
-          const newQuantity = item.quantity - 1;
-          // If you want to remove the item when it hits 0, do that here
-          return { ...item, quantity: newQuantity < 1 ? 1 : newQuantity };
-        }
-        return item;
-      })
-    );
-  };
-
-  const clearCart = () => {
-    setCartItems([]);
+  const clearCart = async () => {
+    try {
+      const cart = await clearCartAPI();
+      setCartItems(cart.items);
+    } catch (error) {
+      console.error("Error clearing cart:", error);
+    }
   };
 
   return (
-    <CartContext.Provider
-      value={{
-        cartItems,
-        addToCart,
-        removeFromCart,
-        incrementQuantity,
-        decrementQuantity,
-        clearCart,
-      }}
-    >
+    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, clearCart }}>
       {children}
     </CartContext.Provider>
   );
