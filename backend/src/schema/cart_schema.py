@@ -19,3 +19,6 @@ class AddToCartSchema(BaseModel):
 class RemoveFromCartSchema(BaseModel):
     username: str
     product_id: int
+
+class ClearCartSchema(BaseModel):
+    username: str

@@ -1,7 +1,7 @@
 from ninja import Router
 from django.http import HttpResponseBadRequest, JsonResponse
 from src.service.cart_service import CartService
-from src.schema.cart_schema import CartResponseSchema, AddToCartSchema, RemoveFromCartSchema
+from src.schema.cart_schema import CartResponseSchema, AddToCartSchema, RemoveFromCartSchema, ClearCartSchema
 
 router = Router()
 
@@ -34,6 +34,6 @@ def remove_from_cart(request, payload: RemoveFromCartSchema):
     return get_cart(request, username=payload.username)
 
 @router.post("/clear/", response=CartResponseSchema)
-def clear_cart(request, username: str):
-    CartService.clear_cart(username)
-    return get_cart(request, username=username)
+def clear_cart(request, payload: ClearCartSchema):
+    CartService.clear_cart(payload.username)
+    return get_cart(request, username=payload.username)
