@@ -6,6 +6,7 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import * as tf from "@tensorflow/tfjs";
 import "@tensorflow/tfjs-backend-webgl";
 import * as poseDetection from "@tensorflow-models/pose-detection";
+import { mediaURL } from "../api/api"; 
 
 // --- GarmentModel Component ---
 function GarmentModel({ overlayModelUrl, modelObject, pose }) {
@@ -119,8 +120,9 @@ const ARTryOn3D = ({ product, onClose }) => {
     const loadModel = async () => {
       if (product?.overlay_model) {
         const loader = new GLTFLoader();
+        const modelUrl = `${mediaURL}${product.overlay_model}`; // Ensure the URL points to the backend
         loader.load(
-          product.overlay_model,
+          modelUrl,
           (gltf) => {
             setModelObject(gltf.scene); // Store the loaded 3D object
             console.log("3D model loaded:", gltf.scene);

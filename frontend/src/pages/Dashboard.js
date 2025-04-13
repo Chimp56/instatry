@@ -1,12 +1,12 @@
 // src/pages/Dashboard.js
 import React, { useState, useEffect, useContext, useMemo } from "react";
 import { CartContext } from "../context/CartContext";
-import ARTryOn3D from "../components/ARTryOn3D"; // Our AR try-on component
-import { fetchProducts, mediaURL } from "../api/api"; // Import the API function
+import ARTryOn3D from "../components/ARTryOn3D";
+import { fetchProducts, mediaURL } from "../api/api";
 import "../styles/Dashboard.css";
 
 const Dashboard = ({ onLogout }) => {
-  const [products, setProducts] = useState([]); // Initialize with an empty array
+  const [products, setProducts] = useState([]);
   const { addToCart } = useContext(CartContext);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");

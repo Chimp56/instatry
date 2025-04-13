@@ -15,7 +15,7 @@ INSTALLED_APPS = [
     "corsheaders",
 
     # Register your app
-    "src.model.apps.ModelConfig",  # Ensure this is included
+    "src.model.apps.ModelConfig", 
 ]
 
 TEMPLATES = [
