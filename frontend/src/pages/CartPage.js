@@ -1,5 +1,5 @@
 // src/pages/CartPage.js
-import React, { useContext } from "react";
+import React, { useContext, useMemo } from "react";
 import { CartContext } from "../context/CartContext";
 
 const CartPage = () => {
@@ -11,10 +11,15 @@ const CartPage = () => {
     clearCart,
   } = useContext(CartContext);
 
-  const shipping = 5.0;
-  const tax = 2.99;
-  const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
-  const total = subtotal + shipping + tax;
+  // Calculate subtotal, shipping, tax, and total dynamically
+  const subtotal = useMemo(
+    () => cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0),
+    [cartItems]
+  );
+  const shipping = subtotal < 100 ? 6.99 : 0;
+  let taxRate = 0.0844;
+  const tax = useMemo(() => subtotal * taxRate, [subtotal, taxRate]);
+  const total = useMemo(() => subtotal + shipping + tax, [subtotal, shipping, tax]);
 
   return (
     <div style={{ padding: "1rem" }}>
@@ -26,7 +31,7 @@ const CartPage = () => {
           {cartItems.map((item) => (
             <div key={item.id} style={{ marginBottom: "1rem" }}>
               <h2>{item.name}</h2>
-              <p>Price: ${item.price}</p>
+              <p>Price: ${item.price.toFixed(2)}</p>
 
               {/* Increment/Decrement Buttons */}
               <button onClick={() => decrementQuantity(item.id)}>-</button>
