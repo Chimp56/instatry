@@ -2,11 +2,13 @@
 import React, { useState, useEffect, useContext, useMemo } from "react";
 import { CartContext } from "../context/CartContext";
 import ARTryOn3D from "../components/ARTryOn3D";
+import SkeletonLoader from "../components/SkeletonLoader"; // Import SkeletonLoader
 import { fetchProducts, mediaURL } from "../api/api";
 import "../styles/Dashboard.css";
 
 const Dashboard = ({ onLogout }) => {
   const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
   const { addToCart } = useContext(CartContext);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
@@ -15,10 +17,13 @@ const Dashboard = ({ onLogout }) => {
   useEffect(() => {
     const loadProducts = async () => {
       try {
+        setLoading(true);
         const data = await fetchProducts();
         setProducts(data);
       } catch (error) {
         console.error("Error loading products:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -69,41 +74,46 @@ const Dashboard = ({ onLogout }) => {
         </div>
       </div>
 
-      <div className="products-grid">
-        {filteredProducts.map((product) => (
-          <div key={product.id} className="product-card">
-            <div className="product-image-container">
-              <img
-                src={`${mediaURL}${product.image_filename}`}
-                alt={product.description}
-                className="product-image"
-                onError={(e) => {
-                  e.target.onerror = null;
-                  e.target.src = "/assets/logo.png";
-                }}
-              />
-            </div>
-            <div className="product-info">
-              <h2 className="product-name">{product.name}</h2>
-              <p className="product-price">${product.price}</p>
-              <div className="product-actions">
-                <button
-                  className="action-btn add-to-cart"
-                  onClick={() => handleAddToCart(product)}
-                >
-                  Add to Cart
-                </button>
-                <button
-                  className="action-btn try-on"
-                  onClick={() => handleTryOn(product)}
-                >
-                  Try On
-                </button>
+      {/* Render skeleton loader if loading */}
+      {loading ? (
+        <SkeletonLoader count={8} />
+      ) : (
+        <div className="products-grid">
+          {filteredProducts.map((product) => (
+            <div key={product.id} className="product-card">
+              <div className="product-image-container">
+                <img
+                  src={`${mediaURL}${product.image_filename}`}
+                  alt={product.description}
+                  className="product-image"
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = "/assets/logo.png";
+                  }}
+                />
+              </div>
+              <div className="product-info">
+                <h2 className="product-name">{product.name}</h2>
+                <p className="product-price">${product.price}</p>
+                <div className="product-actions">
+                  <button
+                    className="action-btn add-to-cart"
+                    onClick={() => handleAddToCart(product)}
+                  >
+                    Add to Cart
+                  </button>
+                  <button
+                    className="action-btn try-on"
+                    onClick={() => handleTryOn(product)}
+                  >
+                    Try On
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
 
       {/* Render AR try-on if a product is selected */}
       {selectedProduct && (
