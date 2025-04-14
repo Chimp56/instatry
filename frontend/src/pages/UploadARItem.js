@@ -1,6 +1,6 @@
-// src/pages/UploadARItem.js
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import "../styles/UploadARItem.css"; // Import the CSS file
 
 const UploadARItem = () => {
   const navigate = useNavigate();
@@ -16,7 +16,6 @@ const UploadARItem = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Package the data to be sent to the backend (simulated here)
     const formData = {
       title,
       price,
@@ -30,18 +29,15 @@ const UploadARItem = () => {
 
     console.log("Submitting AR Item with data:", formData);
     
-    // Simulate an AI authentication check with a delay.
     setTimeout(() => {
-      // Simulate a 30% chance the content is flagged as AI-generated.
       const isAIGenerated = Math.random() < 0.3;
       if (isAIGenerated) {
         alert("Upload denied: The AI authenticator detected AI-generated content.");
       } else {
         alert("Your item has been successfully posted for sale!");
-        // In a real app, you'd update your products list or trigger a re-fetch.
-        navigate("/"); // Redirect to dashboard after successful posting.
+        navigate("/");
       }
-    }, 1500); // Simulated delay of 1.5 seconds
+    }, 1500);
   };
 
   const handleTextureFilesChange = (e) => {
@@ -49,10 +45,12 @@ const UploadARItem = () => {
   };
 
   return (
-    <div style={{ padding: "2rem", maxWidth: "600px", margin: "0 auto" }}>
-      <h2>Upload Item for Sale</h2>
-      <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: "1rem" }}>
+    <div className="upload-container">
+      <div className="upload-header">
+        <h2>Upload Item for Sale</h2>
+      </div>
+      <form className="upload-form" onSubmit={handleSubmit}>
+        <div className="form-group">
           <label htmlFor="title">Item Title:</label>
           <input
             id="title"
@@ -60,10 +58,9 @@ const UploadARItem = () => {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             required
-            style={{ width: "100%", padding: "0.5rem" }}
           />
         </div>
-        <div style={{ marginBottom: "1rem" }}>
+        <div className="form-group">
           <label htmlFor="price">Price:</label>
           <input
             id="price"
@@ -71,80 +68,89 @@ const UploadARItem = () => {
             value={price}
             onChange={(e) => setPrice(e.target.value)}
             required
-            style={{ width: "100%", padding: "0.5rem" }}
           />
         </div>
-        <div style={{ marginBottom: "1rem" }}>
+        <div className="form-group">
           <label htmlFor="description">Description:</label>
           <textarea
             id="description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             required
-            style={{ width: "100%", padding: "0.5rem" }}
           />
         </div>
-        <div style={{ marginBottom: "1rem" }}>
+
+        {/* Custom File Upload for Product Image */}
+        <div className="form-group">
           <label htmlFor="image">Product Image:</label>
+          <label htmlFor="image" className="custom-file-upload">
+            {imageFile ? imageFile.name : "Choose File"}
+          </label>
           <input
             id="image"
             type="file"
             accept="image/*"
             onChange={(e) => setImageFile(e.target.files[0])}
             required
-            style={{ width: "100%" }}
           />
         </div>
-        <div style={{ marginBottom: "1rem" }}>
-          <label>
-            <input
-              type="checkbox"
-              checked={includeAR}
-              onChange={(e) => setIncludeAR(e.target.checked)}
-            />
-            {" "}Include AR Try-On Assets
-          </label>
+
+        <div className="checkbox-group">
+          <input
+            id="includeAR"
+            type="checkbox"
+            checked={includeAR}
+            onChange={(e) => setIncludeAR(e.target.checked)}
+          />
+          <label htmlFor="includeAR">Include AR Try-On Assets</label>
         </div>
+
         {includeAR && (
           <>
-            <div style={{ marginBottom: "1rem" }}>
+            <div className="form-group">
               <label htmlFor="gltf">3D Model (GLTF file):</label>
+              <label htmlFor="gltf" className="custom-file-upload">
+                {gltfFile ? gltfFile.name : "Choose File"}
+              </label>
               <input
                 id="gltf"
                 type="file"
                 accept=".gltf"
                 onChange={(e) => setGltfFile(e.target.files[0])}
                 required={includeAR}
-                style={{ width: "100%" }}
               />
             </div>
-            <div style={{ marginBottom: "1rem" }}>
+            <div className="form-group">
               <label htmlFor="bin">3D Model Binary (BIN file):</label>
+              <label htmlFor="bin" className="custom-file-upload">
+                {binFile ? binFile.name : "Choose File"}
+              </label>
               <input
                 id="bin"
                 type="file"
                 accept=".bin"
                 onChange={(e) => setBinFile(e.target.files[0])}
                 required={includeAR}
-                style={{ width: "100%" }}
               />
             </div>
-            <div style={{ marginBottom: "1rem" }}>
-              <label htmlFor="textures">Textures (optional; multiple allowed):</label>
+            <div className="form-group">
+              <label htmlFor="textures">
+                Textures (optional; multiple allowed):
+              </label>
+              <label htmlFor="textures" className="custom-file-upload">
+                {textureFiles.length > 0 ? `${textureFiles.length} file(s) selected` : "Choose Files"}
+              </label>
               <input
                 id="textures"
                 type="file"
                 accept="image/*"
                 multiple
                 onChange={handleTextureFilesChange}
-                style={{ width: "100%" }}
               />
             </div>
           </>
         )}
-        <button type="submit" style={{ padding: "0.5rem 1rem" }}>
-          Post Item
-        </button>
+        <button type="submit">Post Item</button>
       </form>
     </div>
   );
