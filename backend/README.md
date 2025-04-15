@@ -1,37 +1,21 @@
 # Django Ninja Backend API
 
-## 📌 Project Overview
-This is a Django Ninja-based backend API following the **Controller-Service-Repository-Model** architecture pattern. It is containerized with Docker and uses **PostgreSQL** as the database.
+## Overview
+This is a Django Ninja-based backend API following the **Controller-Service-Repository-Model** architecture pattern. It uses **PostgreSQL** as the database.
 
 ## 📂 Project Structure
 ```
 backend/
 │── src/
 │   ├── controller/        # API layer (routes and request handling)
-│   │   ├── __init__.py
-│   │   ├── user_controller.py
-│   │   ├── auth_controller.py
-│   │   ├── order_controller.py
 │   │
 │   ├── repository/        # Direct DB interactions
-│   │   ├── __init__.py
-│   │   ├── user_repository.py
-│   │   ├── order_repository.py
 │   │
 │   ├── service/           # Business logic
-│   │   ├── __init__.py
-│   │   ├── user_service.py
-│   │   ├── order_service.py
 │   │
 │   ├── model/             # Django ORM models
-│   │   ├── __init__.py
-│   │   ├── user.py
-│   │   ├── order.py
 │   │
 │   ├── schema/            # Pydantic schemas for request/response validation
-│   │   ├── __init__.py
-│   │   ├── user_schema.py
-│   │   ├── order_schema.py
 │   │
 │   ├── api.py             # Registers controllers (entry point for routers)
 │   ├── database.py        # DB connection and session management
@@ -40,10 +24,9 @@ backend/
 │   ├── asgi.py            # ASGI entry point
 │   ├── wsgi.py            # WSGI entry point
 │
-├── Dockerfile             # Docker image setup
-├── docker-compose.yml     # Docker Compose for DB & backend
 ├── .env                   # Environment variables
 ├── manage.py              # Django CLI
+├── requirements.txt       # Python dependencies
 ```
 
 ---
@@ -52,46 +35,53 @@ backend/
 ### Prerequisites
 Ensure you have the following installed:
 - [Python 3.10+](https://www.python.org/downloads/)
-- [Docker](https://www.docker.com/)
-- [Docker Compose](https://docs.docker.com/compose/)
 
 ### 🔧 Setup & Installation
 1. **Clone the repository:**
    ```sh
-   git clone https://github.com/Chimp56/instatry_backend
-   cd instatry_backend
+   git clone https://github.com/Chimp56/instatry
+   cd instatry
    ```
 
-2. **Create and configure environment variables:**
+2. **Change directory to backend:**
    ```sh
-   cp .env.example .env
+   cd backend
    ```
-   Update `.env` with appropriate values for the database and Django settings.
-
-3. **Start the application using Docker:**
+3. **Create a virtual environment:**
    ```sh
-   docker-compose up --build
+   python -m venv venv
    ```
-   This will:
-   - Build the backend container
-   - Start a PostgreSQL database instance
-
-4. **Run database migrations:**
+4. **Activate the virtual environment:**
+   - On Windows:
+     ```sh
+     venv\Scripts\activate
+     ```
+   - On macOS/Linux:
+     ```sh
+     source venv/bin/activate
+     ```
+5. **Install dependencies:**
    ```sh
-   docker exec -it django-backend python manage.py migrate
+   pip install -r requirements.txt
    ```
-
-5. **Create a superuser (optional, for admin access):**
+6. **Make migrations:**
    ```sh
-   docker exec -it django-backend python manage.py createsuperuser
+   python manage.py makemigrations
    ```
-
-6. **Access the API:**
+7. **Apply migrations:**
+   ```sh
+   python manage.py migrate
+   ```
+8. **Run the server:**
+   ```sh
+   python manage.py runserver
+   ```
+9. **Access the API:**
    - Open [http://127.0.0.1:8000/api/docs#/](http://127.0.0.1:8000/api/docs#/) for the Django Ninja interactive API documentation.
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 - **Controller Layer:** Handles API requests and responses (`src/controller/`)
 - **Service Layer:** Contains business logic (`src/service/`)
 - **Repository Layer:** Handles database interactions (`src/repository/`)
@@ -100,36 +90,32 @@ Ensure you have the following installed:
 
 ---
 
-## 🔥 API Documentation
+## API Documentation
 Django Ninja provides built-in OpenAPI documentation:
-- Visit: [http://localhost:8000/docs](http://localhost:8000/docs)
+- Visit: [http://localhost:8000/api/docs#/](http://localhost:8000/api/docs#/)
 
 ---
 
-## 🐳 Docker Setup
-### **Build and Run Containers**
-```sh
-docker-compose up --build
-```
+## Testing
+### Running Tests
+1. **Run tests:**
+   ```sh
+   python -m unittest
+   ```
 
-### **Stop Containers**
-```sh
-docker-compose down
-```
+Tests are located in the `tests` directory. You can run all tests or specify a particular test file.
 
-### **Rebuild Without Cache**
-```sh
-docker-compose build --no-cache
-```
+### Adding Tests
+- Create a new test file in the `tests` directory.
+- Use the `unittest` framework to write your tests.
 
----
 
 ## 📜 License
 This project is licensed under the MIT License.
 
 ---
 
-## 💡 Contributing
+## Contributing
 1. Fork the repository
 2. Create a new branch (`git checkout -b feature-branch`)
 3. Commit your changes (`git commit -m 'Add new feature'`)
@@ -138,14 +124,13 @@ This project is licensed under the MIT License.
 
 ---
 
-## ❓ Need Help?
-Feel free to open an issue or reach out to the maintainers.
+## Quick setup
 
-
-## quick set up
+```sh
 cd backend
 pip install -r requirements.txt
 python manage.py makemigrations
 python manage.py migrate
 python manage.py runserver
 http://localhost:8000/api/docs
+```
