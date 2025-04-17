@@ -1,5 +1,6 @@
 import unittest
 from src.service.ai_image_detector_service import AIImageDetectorService
+import os
 
 class TestAIImageDetectorService(unittest.TestCase):
 
@@ -7,10 +8,11 @@ class TestAIImageDetectorService(unittest.TestCase):
         self.service = AIImageDetectorService()
 
     def test_image_detection(self):
-        test_image = "..\assets\images\temp\photomode_16112023_165018.png"
-        result = self.service.detect(test_image)
-        expected_result = "expected detection result"
-        self.assertEqual(result, expected_result)
+        
+        test_image = "file_storage/assets/products/images/redshirt.png"
+        full_path = os.path.abspath(test_image)
+        result = self.service.detect_image(full_path)
+        self.assertIsInstance(result, list)
 
 if __name__ == '__main__':
     unittest.main()

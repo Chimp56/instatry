@@ -1,111 +1,212 @@
-Introduction 
+# InstaFit: A Fashion Marketplace with AR Try-On
 
-Generative-AI has been taking over the internet like storm, specifically in creative apps and marketplaces like, Pinterest Etsy, and even parts of Amazon, a lot of the content now is to be overflooded by AI rather than users, which has popularized a theory in 2024 going into 2025: The Dead Internet Theory: where all of the generated content on the internet is of bots and AI rather than users. Even when looking at new clothing or haircut inspiration at one’s next visit has become difficult in the new day and age of technology. For our project, we want to try to solve this problem in a new and innovative way and find a balance between Gen-AI by using it in an effective way. Our solution: InstaFit - a fashion marketplace, where users can browse for clothes for purchasing or for inspiration, as well as being able to try on some clothing through Augmented Reality (AR). 
+## Introduction
 
-Chosen UI / Project Goals 
+InstaFit is a fashion marketplace designed to enhance the shopping experience by integrating **Augmented Reality (AR)** try-on functionality. Users can browse for clothing, try on garments virtually, and even upload their own clothing for AR integration. InstaFit bridges the gap between **AI** and **fashion**, offering a more authentic and interactive shopping experience.
 
-The InstaFit user interface (UI) will focus like a personalized E-commerce experience for Desktop and Mobile (Responsive Design): 
+---
 
-Create accounts. 
+## Features
 
-Browse the marketplace with optional filters. 
+### User Features
+- **Account Management**: Create accounts and log in to access personalized features.
+- **Marketplace Browsing**: Explore a wide range of clothing items with search and filter options.
+- **AR Try-On**: Virtually try on garments using AR technology.
+- **Upload Clothing**: Users can upload their own clothing for AR try-on.
+- **Shopping Cart**: Add items to the cart, adjust quantities, and proceed to checkout.
 
-Be able to view individual items and details. 
+---
 
-Use AR try-on functionality on applicable garments. 
+##  Tech Stack
 
-Upload and scan their own clothing to integrate with AR try-ons. 
+### Frontend
+- **React.js**: For building the user interface.
+- **React Router**: For navigation and routing.
+- **Three.js**: For rendering 3D models in AR try-on.
+- **CSS/PostCSS**: For styling the application.
 
-Have an AI verifier in the backend. 
+### Backend
+- **Django Ninja**: For building a fast and scalable REST API.
+- **PostgreSQL**: For database management.
+- **Pydantic**: For request/response validation.
+- **Hugging Face**: For AI-based image detection and verification.
 
- 
+---
 
-Identified Issues 
+## 📂 Project Structure
 
-Lack of interactive shopping experience. 
+### Frontend
+```
+frontend/
+├── src/
+│   ├── api/                # API integration
+│   ├── components/         # Reusable UI components
+│   ├── context/            # Context API for state management
+│   ├── pages/              # Application pages (Dashboard, Cart, Login, etc.)
+│   ├── styles/             # CSS/PostCSS styles
+│   ├── App.js              # Main application component
+│   ├── index.js            # Entry point for React
+│   └── ...                 # Other configuration files
+├── public/                 # Static assets (images, icons, etc.)
+└── package.json            # Frontend dependencies
+```
 
-AI-Generated Fashion products. 
+### Backend
+```
+backend/
+├── src/
+│   ├── controller/         # API routes and request handling
+│   ├── repository/         # Database interactions
+│   ├── service/            # Business logic
+│   ├── model/              # Django ORM models
+│   ├── schema/             # Pydantic schemas for validation
+│   ├── api.py              # Registers API routes
+│   ├── settings.py         # Django settings
+│   ├── urls.py             # URL routing
+│   ├── asgi.py             # ASGI entry point
+│   ├── wsgi.py             # WSGI entry point
+│   └── ...                 # Other configuration files
+├── manage.py               # Django CLI
+├── requirements.txt        # Backend dependencies
+└── .env                    # Environment variables
+```
 
-Trust & authenticity within E-commerce, specifically in creative/art products. 
+---
 
- 
+##  Getting Started
 
- 
+### Prerequisites
+- **Node.js** (v16+)
+- **Python** (v3.10+)
 
- 
+---
 
-Related Works 
+### Frontend Setup
 
-Marketplaces like Amazon and Etsy exist and are reputable but they lack AR try-on functionality. Pinterest shopping offers fashion inspiration but again does not support teal-time virtual try-on or authenticity verification of any sort. There are products like ASOS, but they are limited and do not address the need for users to be able to upload their work or own clothes. Instead, they only include a pre-existing try-on. 
+1. **Navigate to the frontend directory**:
+   ```sh
+   cd frontend
+   ```
 
-UI Modules	 
+2. **Install dependencies**:
+   ```sh
+   npm install
+   ```
 
-Dashboard: This was a quick Lo-Fi sketch of an example of the main User Dashboard of what a user sees once logging in. 
+3. **Start the development server**:
+   ```sh
+   npm start
+   ```
 
- 
+4. **Access the application**:
+   Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-Individual item listing: Screen to show individual product with options of Buying, adding to cart, and AR. 
+---
 
- 
+### Backend Setup
 
-New & Advanced Implementations 
+1. **Navigate to the backend directory**:
+   ```sh
+   cd backend
+   ```
 
-Desktop & Mobile AR integration. 
+2. **Create a virtual environment**:
+   ```sh
+   python -m venv venv
+   ```
 
-User-Uploaded clothing for potential AR-Try on  
+3. **Activate the virtual environment**:
+   - On Windows:
+     ```sh
+     venv\Scripts\activate
+     ```
+   - On macOS/Linux:
+     ```sh
+     source venv/bin/activate
+     ```
 
-AI-based Authenticity Verification 
+4. **Install dependencies**:
+   ```sh
+   pip install -r requirements.txt
+   ```
 
- 
+5. **Set up the database**:
+   - Update the `.env` file with your PostgreSQL credentials.
+   - Apply migrations:
+     ```sh
+     python manage.py makemigrations
+     python manage.py migrate
+     ```
 
-Timeline 
+6. **Run the development server**:
+   ```sh
+   python manage.py runserver
+   ```
 
-Phase 
+7. **Access the API**:
+   Open [http://localhost:8000/api/docs](http://localhost:8000/api/docs) for interactive API documentation.
 
-Time/Duration 
+---
 
-Task 
+##  Testing
 
-Planning  
+### Frontend
+1. **Run tests**:
+   ```sh
+   npm test
+   ```
 
-1.5 weeks 
+2. **Add tests**:
+   - Write unit tests for components in the `src/components/` directory.
+   - Use Jest and React Testing Library.
 
-Figure out main tools, and pre-existing work and start designing rough ideas 
+### Backend
+1. **Run tests**:
+   ```sh
+   python -m unittest
+   ```
 
-Design 
+2. **Add tests**:
+   - Write tests for services, repositories, and controllers in the `tests/` directory.
 
-1 weeks  
+---
 
-Design Hi-Fi in Figma, and then run some testing/iteration 
+##  API Documentation
 
-Prototype 
+The backend API is documented using **Django Ninja**. Access the interactive documentation at:
+- [http://localhost:8000/api/docs](http://localhost:8000/api/docs)
 
-4 weeks 
+---
 
-Build out prototype of product 
+## 📜 License
 
-Testing 
+This project is licensed under the **MIT License**.
 
-2 weeks 
+---
 
-Continue to test and make improvements. 
+## 🤝 Contributing
 
- 
+1. **Fork the repository**.
+2. **Create a new branch**:
+   ```sh
+   git checkout -b feature-branch
+   ```
+3. **Commit your changes**:
+   ```sh
+   git commit -m "Add new feature"
+   ```
+4. **Push to the branch**:
+   ```sh
+   git push origin feature-branch
+   ```
+5. **Create a Pull Request**.
 
-Expected Impact 
-
-Better/Enhanced Shopping Experience 
-
-More authentic marketplace 
-
-AR try-ons and uploading  
-
-Bridge AI and Fashion. 
+---
 
 
 
-AI Image detection and verification
+## 📈 Expected Impact
 
-Hugging Face
-
-Login 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
+- Enhanced shopping experience with AR try-ons.
+- More authentic and trustworthy marketplace.
+- Integration of AI for fashion and authenticity verification.
