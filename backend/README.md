@@ -79,6 +79,14 @@ Ensure you have the following installed:
 9. **Access the API:**
    - Open [http://127.0.0.1:8000/api/docs#/](http://127.0.0.1:8000/api/docs#/) for the Django Ninja interactive API documentation.
 
+### Setup with Docker
+
+If the above steps from 6-8 are not working, you can use Docker to set up the environment.
+
+1. **Build and run the Docker container:**
+   ```sh
+   docker-compose up --build
+   ```
 ---
 
 ## Architecture
