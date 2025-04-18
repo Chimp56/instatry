@@ -12,8 +12,8 @@ class Product(models.Model):
     tags = ArrayField(
         models.CharField(max_length=255),
         blank=True,
-        null=True,  # Allow null values
-        default=list  # Default to an empty list
+        null=True,
+        default=list 
     )
 
     class Meta:

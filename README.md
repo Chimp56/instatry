@@ -17,7 +17,7 @@ InstaFit is a fashion marketplace designed to enhance the shopping experience by
 
 ---
 
-##  Tech Stack
+## Tech Stack
 
 ### Frontend
 - **React.js**: For building the user interface.
@@ -78,6 +78,7 @@ backend/
 ### Prerequisites
 - **Node.js** (v16+)
 - **Python** (v3.10+)
+- **Docker** (optional, for Docker Compose setup)
 
 ---
 
@@ -144,11 +145,33 @@ backend/
    ```
 
 7. **Access the API**:
-   Open [http://localhost:8000/api/docs](http://localhost:8000/api/docs) for interactive API documentation.
+
+   Open  [http://localhost:8000/api/docs](http://localhost:8000/api/docs) in your browser for the Django Ninja interactive API documentation.
+
 
 ---
 
-##  Testing
+#### Alternative: Using Docker Compose
+
+If the manual setup doesn't work, you can use Docker Compose to set up the project:
+
+1. **Navigate to the backend directory**:
+   ```sh
+   cd backend
+   ```
+
+2. **Run Docker Compose**:
+   ```sh
+   docker-compose up --build
+   ```
+
+3. **Access the API**:
+
+   Open  [http://localhost:8000/api/docs](http://localhost:8000/api/docs) in your browser for the Django Ninja interactive API documentation.
+
+---
+
+## Testing
 
 ### Frontend
 1. **Run tests**:
@@ -202,8 +225,6 @@ This project is licensed under the **MIT License**.
 5. **Create a Pull Request**.
 
 ---
-
-
 
 ## 📈 Expected Impact
 
