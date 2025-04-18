@@ -2,39 +2,33 @@
 import requests
 import json
 
-""" 
-export const productsData = [
-  {
-    id: 1,
-    name: "Red T-Shirt",
-    price: 20.0,
-    image: "/assets/redshirt.png", // Image in public/assets
-    overlayModel: "/models/red_t_shirt.gltf", // 3D model in public/models
-    description: "A stylish red t-shirt.",
-    category: "Top"
-  },
-  {
-    id: 2,
-    name: "Wizard Hat",
-    price: 30.0,
-    image: "/assets/wizard_hat.png",
-    overlayModel: "/models/wizards_hat_gltf/scene.gltf",
-    description: "A magical wizard hat.",
-    category: "Accessory"
-  },
-  {
-    id: 3,
-    name: "Victorian Dress",
-    price: 50.0,
-    image: "/assets/victorian_dress.png",
-    overlayModel: "/models/victorian_dress/scene.gltf",
-    description: "A beautiful Victorian dress.",
-    category: "Dress"
-  },
-];
 
- """
 def insert_products():
+    """
+    Inserts a list of predefined products into a remote API.
+    This function sends HTTP POST requests to a specified API endpoint to insert
+    product data. Each product contains details such as name, description, price,
+    image filename, overlay model, and category. The function logs the request body,
+    response text, and the status of each insertion.
+    Endpoint:
+      http://localhost:8000/api/products/
+    Headers:
+      Content-Type: application/json
+    Products:
+      A predefined list of products with the following fields:
+        - name (str): The name of the product.
+        - description (str): A brief description of the product.
+        - price (float): The price of the product.
+        - image_filename (str): The filename of the product's image.
+        - overlay_model (str): The filename of the product's 3D overlay model.
+        - category (str): The category of the product.
+    Logs:
+      - The request body sent to the API.
+      - The response text received from the API.
+      - Success or failure message for each product insertion.
+    Raises:
+      Prints an error message if the API response status code is not 200.
+    """
     url = "http://localhost:8000/api/products/"
     headers = {
         "Content-Type": "application/json"
