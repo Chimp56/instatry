@@ -15,12 +15,32 @@ const SignupPage = ({ onSignup }) => {
     password: ''
   });
 
+  // function to validate password
+  // checks for minimum length, presence of numbers and special characters
+  const validatePassword = (password) => {
+    const minLength = 8;
+    const hasNumber = /\d/.test(password);
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+  
+    return {
+      isValid: password.length >= minLength && hasNumber && hasSpecialChar,
+      errors: {
+        tooShort: password.length < minLength,
+        noNumber: !hasNumber,
+        noSpecialChar: !hasSpecialChar,
+      },
+    };
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Signing up:", formData);
+
+    const passwordValidation = validatePassword(formData.password);
+    
     onSignup(formData.username);
-    if (!passwordsMatch) {
-      alert("Passwords don't match!");
+    if (!passwordValidation.isValid || !passwordsMatch) {
+      alert("Please fix errors!");
       return;
     }
   };
@@ -32,6 +52,24 @@ const SignupPage = ({ onSignup }) => {
       [name]: value
     });
   };
+  const [passwordErrors, setPasswordErrors] = useState({
+    tooShort: false,
+    noNumber: false,
+    noSpecialChar: false,
+  });
+  
+  const handlePasswordChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  
+    // Validate password if it's the password field
+    if (name === "password") {
+      const validation = validatePassword(value);
+      setPasswordErrors(validation.errors);
+    }
+  };
+
+  const isFormValid = formData.password && formData.confirmPassword && validatePassword(formData.password).isValid && formData.password === formData.confirmPassword;
 
 
 // function to check if passwords match
@@ -85,10 +123,27 @@ const passwordsMatch = formData.password === formData.confirmPassword;
             name="password"
             type="password"
             value={formData.password}
-            onChange={handleChange}
+            onChange={handlePasswordChange}  // Use the new handler
             required
-            className="form-input"
+            className={`form-input ${
+              (passwordErrors.tooShort || passwordErrors.noNumber || passwordErrors.noSpecialChar) 
+              ? 'error' 
+              : ''
+            }`}
           />
+          {formData.password && (
+            <div className="error-messages">
+              {passwordErrors.tooShort && (
+                <p className="error-message" style={{ color: 'red' }}>Password must be at least 8 characters.</p>
+              )}
+              {passwordErrors.noNumber && (
+                <p className="error-message" style={{ color: 'red' }}>Password must contain at least one number.</p>
+              )}
+              {passwordErrors.noSpecialChar && (
+                <p className="error-message" style={{ color: 'red' }}>Password must contain at least one special character.</p>
+              )}
+            </div>
+          )}
         </div>
 
         <div className="form-group">
@@ -109,7 +164,7 @@ const passwordsMatch = formData.password === formData.confirmPassword;
           )}
         </div>
 
-        <button type="submit" className="auth-button">
+        <button type="submit" className="auth-button" disabled={!isFormValid}>
           Sign Up
         </button>
       </form>
