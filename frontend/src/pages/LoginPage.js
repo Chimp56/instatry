@@ -3,6 +3,11 @@ import AuthForm from '../components/AuthForm';
 import logo from '../data/assets/logo.png'; 
 import '../styles/authStyles.css';
 
+// LoginPage component
+// handles the login process for existing users
+// includes a form for entering username and password
+// includes a link to the signup page for new users
+
 const LoginPage = ({ onLogin }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");

@@ -3,6 +3,9 @@ import React, { useState } from "react";
 import DynamicTryOn from "../components/DynamicTryOn";
 import { productsData } from "../data/products";
 
+// DynamicTryOnPage component to handle the dynamic try-on feature.
+// This component allows users to select a product and view it in AR.
+
 const DynamicTryOnPage = () => {
   // For testing, we select the Victorian Dress (id:3) as our dynamic try-on product.
   const [selectedProduct, setSelectedProduct] = useState(

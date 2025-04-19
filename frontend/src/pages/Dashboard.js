@@ -6,6 +6,13 @@ import SkeletonLoader from "../components/SkeletonLoader"; // Import SkeletonLoa
 import { fetchProducts, mediaURL } from "../api/api";
 import "../styles/Dashboard.css";
 
+// Dashboard component
+// Displays a list of products fetched from the API
+// Allows users to add products to their cart
+// Allows users to try on products using AR
+// Includes a search bar to filter products by name
+
+
 const Dashboard = ({ onLogout }) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);

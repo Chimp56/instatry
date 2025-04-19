@@ -4,6 +4,8 @@ import { FaShoppingCart } from "react-icons/fa"; // Using same icon as in Navbar
 import { mediaURL } from "../api/api"; // Used to build the image URL
 import "../styles/CartPage.css"; // Import the CSS file
 
+// CartPage component to display the shopping cart items, their prices,
+// quantities, and the total cost including shipping and tax.
 const CartPage = () => {
   const {
     cartItems,

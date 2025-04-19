@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import { FaUserCircle } from "react-icons/fa";
 import "../styles/UserProfile.css";
 
+// UserProfile component to display user information and their activities
+// such as purchases, items posted, and items sold.
+
 const UserProfile = ({ user }) => {
   // Dummy data for simulation; later replace with API calls.
   const [purchases, setPurchases] = useState([]);

@@ -3,6 +3,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/authStyles.css';
 
+// AuthForm component
+// A reusable component for authentication forms (login/signup)
+// Includes a logo, title, form fields, and a footer with a link to the opposite page
+
 const AuthForm = ({ 
   logo, 
   title, 

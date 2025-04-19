@@ -2,6 +2,9 @@ const domain = "http://localhost:8000/";
 const api = domain + "api/";
 export const mediaURL = domain + "media/";
 
+// This function fetches the list of products from the API.
+// It handles errors and logs them to the console.
+
 export const fetchProducts = async () => {
   try {
     const response = await fetch(`${api}products/`);

@@ -2,6 +2,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+// Component for uploading an item for sale.
+// This component allows users to input item details such as title, price,
+// description, and an image file. 
+
 const UploadItem = () => {
   const [title, setTitle] = useState("");
   const [price, setPrice] = useState("");

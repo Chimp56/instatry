@@ -1,6 +1,9 @@
 // src/pages/CartPage.js
 import React from "react";
 
+// CartPage component to display the shopping cart items, their prices,
+// quantities, and the total cost including shipping and tax.
+
 const CartPage = () => {
   // In a real scenario, you'd get cart items from React Context or Redux
   const cartItems = [

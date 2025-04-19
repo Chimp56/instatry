@@ -1,6 +1,9 @@
 // src/components/ARTryOn.js
 import React, { useRef, useState } from "react";
 
+// ARTryOn component to handle the augmented reality try-on feature.
+// This component uses the device's camera to allow users to try on items
+
 const ARTryOn = ({ product, onClose }) => {
   const videoRef = useRef(null);
   const [cameraActive, setCameraActive] = useState(false);

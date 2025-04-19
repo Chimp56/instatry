@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/UploadARItem.css"; // Import the CSS file
 
+// Component for uploading an item for sale, including AR assets.
+
 const UploadARItem = () => {
   const navigate = useNavigate();
   const [title, setTitle] = useState("");

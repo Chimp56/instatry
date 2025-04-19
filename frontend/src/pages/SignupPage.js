@@ -3,6 +3,11 @@ import AuthForm from '../components/AuthForm';
 import logo from '../data/assets/logo.png'; 
 import '../styles/authStyles.css';
 
+// SignupPage component
+// handles the signup process for new users
+// includes a form for entering username, email, password, and password confirmation
+// includes a link to the login page for users who already have an account
+
 const SignupPage = ({ onSignup }) => {
   const [formData, setFormData] = useState({
     username: '',
@@ -14,14 +19,23 @@ const SignupPage = ({ onSignup }) => {
     e.preventDefault();
     console.log("Signing up:", formData);
     onSignup(formData.username);
+    if (!passwordsMatch) {
+      alert("Passwords don't match!");
+      return;
+    }
   };
 
   const handleChange = (e) => {
+    const { name, value } = e.target;
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [name]: value
     });
   };
+
+
+// function to check if passwords match
+const passwordsMatch = formData.password === formData.confirmPassword;
 
   return (
     <AuthForm
@@ -75,6 +89,24 @@ const SignupPage = ({ onSignup }) => {
             required
             className="form-input"
           />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="confirmPassword" className="form-label">
+            Verify Password:
+          </label>
+          <input
+            id="confirmPassword"  // Change this ID
+            name="confirmPassword"  // Change this name
+            type="password"
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            required
+            className={`form-input ${formData.confirmPassword && !passwordsMatch ? 'error' : ''}`}
+          />
+          {formData.confirmPassword && !passwordsMatch && (
+            <p className="error-message" style={{ color: 'red' }}>Passwords do not match.</p>
+          )}
         </div>
 
         <button type="submit" className="auth-button">
