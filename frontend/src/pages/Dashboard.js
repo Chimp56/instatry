@@ -83,7 +83,7 @@ const Dashboard = ({ onLogout }) => {
 
       {/* Render skeleton loader if loading */}
       {loading ? (
-        <SkeletonLoader count={8} />
+        <SkeletonLoader count={12} />
       ) : (
         <div className="products-grid">
           {filteredProducts.map((product) => (
