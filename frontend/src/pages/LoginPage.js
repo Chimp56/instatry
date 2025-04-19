@@ -1,30 +1,32 @@
+// Import dependencies and styles
 import React, { useState } from "react";
 import AuthForm from '../components/AuthForm';
-import '../styles/authStyles.css';
+import '../styles/authStyles.css'; // Page-specific styles
 
-// LoginPage component
-// handles the login process for existing users
-// includes a form for entering username and password
-// includes a link to the signup page for new users
-
+// LoginPage component handles user login
 const LoginPage = ({ onLogin }) => {
+  // Form state for credentials
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
+  // Handle form submission logic
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Logging in:", username);
-    onLogin(username);
+    onLogin(username); // Trigger login callback
   };
 
   return (
+    // AuthForm wrapper with shared layout
     <AuthForm
       title="Login"
       footerText="Don't have an account?"
       footerLinkText="Sign Up"
       footerLinkPath="/signup"
     >
+      {/* Login input form */}
       <form onSubmit={handleSubmit} className="auth-form">
+        {/* Username input field */}
         <div className="form-group">
           <label htmlFor="username" className="form-label">
             Username:
@@ -39,6 +41,7 @@ const LoginPage = ({ onLogin }) => {
           />
         </div>
         
+        {/* Password input field */}
         <div className="form-group">
           <label htmlFor="password" className="form-label">
             Password:
@@ -53,6 +56,7 @@ const LoginPage = ({ onLogin }) => {
           />
         </div>
         
+        {/* Submit button for login */}
         <button type="submit" className="auth-button">
           Login
         </button>

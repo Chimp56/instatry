@@ -1,26 +1,23 @@
 import React, { useState } from "react";
 import AuthForm from '../components/AuthForm';
-import '../styles/authStyles.css';
+import '../styles/authStyles.css'; // Shared auth form styles
 
-// SignupPage component
-// handles the signup process for new users
-// includes a form for entering username, email, password, and password confirmation
-// includes a link to the login page for users who already have an account
-
+// SignupPage component for new users
 const SignupPage = ({ onSignup }) => {
+  // Form field state object
   const [formData, setFormData] = useState({
     username: '',
     email: '',
     password: ''
   });
 
-  // function to validate password
-  // checks for minimum length, presence of numbers and special characters
+  // Password validation logic
   const validatePassword = (password) => {
     const minLength = 8;
     const hasNumber = /\d/.test(password);
     const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
-  
+
+    // Return validation result and errors
     return {
       isValid: password.length >= minLength && hasNumber && hasSpecialChar,
       errors: {
@@ -31,19 +28,24 @@ const SignupPage = ({ onSignup }) => {
     };
   };
 
+  // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Signing up:", formData);
 
     const passwordValidation = validatePassword(formData.password);
-    
-    onSignup(formData.username);
+
+    // Early exit if form invalid
     if (!passwordValidation.isValid || !passwordsMatch) {
       alert("Please fix errors!");
       return;
     }
+
+    // Trigger signup callback
+    onSignup(formData.username);
   };
 
+  // Update form field values
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -51,37 +53,46 @@ const SignupPage = ({ onSignup }) => {
       [name]: value
     });
   };
+
+  // Password error state object
   const [passwordErrors, setPasswordErrors] = useState({
     tooShort: false,
     noNumber: false,
     noSpecialChar: false,
   });
-  
+
+  // Handle password change + validation
   const handlePasswordChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-  
-    // Validate password if it's the password field
+
     if (name === "password") {
       const validation = validatePassword(value);
       setPasswordErrors(validation.errors);
     }
   };
 
-  const isFormValid = formData.password && formData.confirmPassword && validatePassword(formData.password).isValid && formData.password === formData.confirmPassword;
+  // Check overall form validity
+  const isFormValid =
+    formData.password &&
+    formData.confirmPassword &&
+    validatePassword(formData.password).isValid &&
+    formData.password === formData.confirmPassword;
 
-
-// function to check if passwords match
-const passwordsMatch = formData.password === formData.confirmPassword;
+  // Check if passwords match
+  const passwordsMatch = formData.password === formData.confirmPassword;
 
   return (
+    // Reusable auth form layout
     <AuthForm
       title="Create Account"
       footerText="Already have an account?"
       footerLinkText="Login"
       footerLinkPath="/login"
     >
+      {/* Signup form starts here */}
       <form onSubmit={handleSubmit}>
+        {/* Username field */}
         <div className="form-group">
           <label htmlFor="username" className="form-label">
             Username:
@@ -97,6 +108,7 @@ const passwordsMatch = formData.password === formData.confirmPassword;
           />
         </div>
 
+        {/* Email field */}
         <div className="form-group">
           <label htmlFor="email" className="form-label">
             Email:
@@ -112,6 +124,7 @@ const passwordsMatch = formData.password === formData.confirmPassword;
           />
         </div>
 
+        {/* Password field with validation feedback */}
         <div className="form-group">
           <label htmlFor="password" className="form-label">
             Password:
@@ -121,7 +134,7 @@ const passwordsMatch = formData.password === formData.confirmPassword;
             name="password"
             type="password"
             value={formData.password}
-            onChange={handlePasswordChange}  // Use the new handler
+            onChange={handlePasswordChange}
             required
             className={`form-input ${
               (passwordErrors.tooShort || passwordErrors.noNumber || passwordErrors.noSpecialChar) 
@@ -129,39 +142,53 @@ const passwordsMatch = formData.password === formData.confirmPassword;
               : ''
             }`}
           />
+          {/* Conditional password error messages */}
           {formData.password && (
             <div className="error-messages">
               {passwordErrors.tooShort && (
-                <p className="error-message" style={{ color: 'red' }}>Password must be at least 8 characters.</p>
+                <p className="error-message" style={{ color: 'red' }}>
+                  Password must be at least 8 characters.
+                </p>
               )}
               {passwordErrors.noNumber && (
-                <p className="error-message" style={{ color: 'red' }}>Password must contain at least one number.</p>
+                <p className="error-message" style={{ color: 'red' }}>
+                  Password must contain at least one number.
+                </p>
               )}
               {passwordErrors.noSpecialChar && (
-                <p className="error-message" style={{ color: 'red' }}>Password must contain at least one special character.</p>
+                <p className="error-message" style={{ color: 'red' }}>
+                  Password must contain at least one special character.
+                </p>
               )}
             </div>
           )}
         </div>
 
+        {/* Confirm password field */}
         <div className="form-group">
           <label htmlFor="confirmPassword" className="form-label">
             Verify Password:
           </label>
           <input
-            id="confirmPassword"  // Change this ID
-            name="confirmPassword"  // Change this name
+            id="confirmPassword"
+            name="confirmPassword"
             type="password"
             value={formData.confirmPassword}
             onChange={handleChange}
             required
-            className={`form-input ${formData.confirmPassword && !passwordsMatch ? 'error' : ''}`}
+            className={`form-input ${
+              formData.confirmPassword && !passwordsMatch ? 'error' : ''
+            }`}
           />
+          {/* Password match error message */}
           {formData.confirmPassword && !passwordsMatch && (
-            <p className="error-message" style={{ color: 'red' }}>Passwords do not match.</p>
+            <p className="error-message" style={{ color: 'red' }}>
+              Passwords do not match.
+            </p>
           )}
         </div>
 
+        {/* Submit button for signup */}
         <button type="submit" className="auth-button" disabled={!isFormValid}>
           Sign Up
         </button>

@@ -1,12 +1,12 @@
 import React, { useContext } from "react";
 import { CartContext } from "../context/CartContext";
-import { FaShoppingCart } from "react-icons/fa"; // Using same icon as in Navbar
-import { mediaURL } from "../api/api"; // Used to build the image URL
-import "../styles/CartPage.css"; // Import the CSS file
+import { FaShoppingCart } from "react-icons/fa"; // Shopping cart icon
+import { mediaURL } from "../api/api"; // Image base URL
+import "../styles/CartPage.css"; // Component styles
 
-// CartPage component to display the shopping cart items, their prices,
-// quantities, and the total cost including shipping and tax.
+// Main cart page component
 const CartPage = () => {
+  // Extract cart state and functions
   const {
     cartItems,
     removeFromCart,
@@ -15,17 +15,22 @@ const CartPage = () => {
     clearCart,
   } = useContext(CartContext);
 
+  // Cost breakdown constants
   const shipping = 5.0;
   const tax = 2.99;
+
+  // Calculate subtotal from cart items
   const subtotal = cartItems.reduce(
     (acc, item) => acc + item.price * item.quantity,
     0
   );
+
+  // Calculate final total cost
   const total = subtotal + shipping + tax;
 
   return (
     <div className="cart-page-container">
-      {/* Header with the shopping cart icon */}
+      {/* Page header with icon */}
       <div className="cart-header">
         <h1 className="cart-header-title">
           <FaShoppingCart className="nav-icon" />
@@ -33,16 +38,18 @@ const CartPage = () => {
         </h1>
       </div>
 
-      {/* Two-column layout for cart items and order summary */}
+      {/* Main layout: items and summary */}
       <div className="cart-content">
-        {/* Left Column: Cart Items */}
+        {/* Left column: cart items list */}
         <div className="cart-left">
           {cartItems.length === 0 ? (
+            // Show empty cart message
             <p className="cart-empty-msg">Your cart is empty!</p>
           ) : (
+            // Map through each cart item
             cartItems.map((item) => (
               <div key={item.id} className="cart-item">
-                {/* Display the actual product image */}
+                {/* Product image or fallback */}
                 {item.image_filename ? (
                   <div className="cart-item-image-wrapper">
                     <img
@@ -61,11 +68,12 @@ const CartPage = () => {
                   </div>
                 )}
 
+                {/* Item name, price, quantity controls */}
                 <div className="cart-item-details">
                   <h2 className="cart-item-title">{item.name}</h2>
                   <p className="cart-item-price">${item.price.toFixed(2)}</p>
 
-                  {/* Quantity controls */}
+                  {/* Quantity increment/decrement buttons */}
                   <div className="cart-item-quantity">
                     <button
                       className="quantity-btn"
@@ -82,7 +90,7 @@ const CartPage = () => {
                     </button>
                   </div>
 
-                  {/* Remove button, centered below the quantity controls */}
+                  {/* Button to remove from cart */}
                   <div className="cart-item-remove-container">
                     <button
                       className="cart-remove-btn"
@@ -97,10 +105,13 @@ const CartPage = () => {
           )}
         </div>
 
-        {/* Right Column: Cart Summary */}
+        {/* Right column: order summary */}
         {cartItems.length > 0 && (
           <div className="cart-summary">
+            {/* Summary title */}
             <h3 className="cart-summary-title">Summary</h3>
+
+            {/* Subtotal line */}
             <div className="cart-summary-line">
               <span>
                 Subtotal ({cartItems.length}{" "}
@@ -108,20 +119,26 @@ const CartPage = () => {
               </span>
               <span>${subtotal.toFixed(2)}</span>
             </div>
+
+            {/* Shipping line */}
             <div className="cart-summary-line">
               <span>Shipping:</span>
               <span>${shipping.toFixed(2)}</span>
             </div>
+
+            {/* Tax line */}
             <div className="cart-summary-line">
               <span>Tax:</span>
               <span>${tax.toFixed(2)}</span>
             </div>
+
+            {/* Total cost line */}
             <div className="cart-summary-total">
               <span>Total:</span>
               <span>${total.toFixed(2)}</span>
             </div>
 
-            {/* Action Buttons: Primary (Checkout) and Secondary (Clear Cart) */}
+            {/* Action buttons: checkout and clear */}
             <div className="cart-summary-actions">
               <button className="cart-checkout-btn">Checkout</button>
               <button className="cart-clear-btn" onClick={clearCart}>
