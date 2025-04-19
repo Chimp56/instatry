@@ -8,7 +8,6 @@ import '../styles/authStyles.css';
 // Includes a logo, title, form fields, and a footer with a link to the opposite page
 
 const AuthForm = ({ 
-  logo, 
   title, 
   children, 
   footerText, 
@@ -19,7 +18,7 @@ const AuthForm = ({
     <div className="auth-container">
       <div className="logo-container">
         <img 
-          src={logo} 
+          src="/logo.png" 
           alt="App Logo" 
           className="auth-logo" 
         />

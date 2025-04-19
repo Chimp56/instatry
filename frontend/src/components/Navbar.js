@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { FaShoppingCart, FaUserCircle, FaUpload, FaBars, FaTimes } from "react-icons/fa";
-import logo from "../data/assets/logo.png";
 import "../styles/Navbar.css";
 
 const Navbar = ({ user, onLogout }) => {
@@ -24,7 +23,7 @@ const Navbar = ({ user, onLogout }) => {
     <nav className="navbar">
       <div className="navbar-left">
         <Link to="/" className="logo-link" onClick={closeMobileMenu}>
-          <img src={logo} alt="InstaFit Logo" className="navbar-logo" />
+          <img src="/logo.png" alt="InstaFit Logo" className="navbar-logo" />
         </Link>
       </div>
 

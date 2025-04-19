@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import AuthForm from '../components/AuthForm';
-import logo from '../data/assets/logo.png'; 
 import '../styles/authStyles.css';
 
 // LoginPage component
@@ -20,7 +19,6 @@ const LoginPage = ({ onLogin }) => {
 
   return (
     <AuthForm
-      logo={logo}
       title="Login"
       footerText="Don't have an account?"
       footerLinkText="Sign Up"

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import AuthForm from '../components/AuthForm';
-import logo from '../data/assets/logo.png'; 
 import '../styles/authStyles.css';
 
 // SignupPage component
@@ -77,7 +76,6 @@ const passwordsMatch = formData.password === formData.confirmPassword;
 
   return (
     <AuthForm
-      logo={logo}
       title="Create Account"
       footerText="Already have an account?"
       footerLinkText="Login"
