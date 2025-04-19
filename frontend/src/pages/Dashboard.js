@@ -95,7 +95,7 @@ const Dashboard = ({ onLogout }) => {
                   className="product-image"
                   onError={(e) => {
                     e.target.onerror = null;
-                    e.target.src = "/assets/logo.png";
+                    e.target.src = "/logo.png";
                   }}
                 />
               </div>
