@@ -10,7 +10,7 @@ InstaFit is a fashion marketplace designed to enhance the shopping experience by
 
 ### User Features
 - **Account Management**: Create accounts and log in to access personalized features.
-- **Marketplace Browsing**: Explore a wide range of clothing items with search and filter options.
+- **Marketplace Browsing**: Explore a wide range of clothing items with search options.
 - **AR Try-On**: Virtually try on garments using AR technology.
 - **Upload Clothing**: Users can upload their own clothing for AR try-on.
 - **Shopping Cart**: Add items to the cart, adjust quantities, and proceed to checkout.
