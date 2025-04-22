@@ -1,8 +1,8 @@
 // src/pages/UploadItem.js
 
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 
 // UploadItem component for selling products
 const UploadItem = () => {
@@ -30,8 +30,14 @@ const UploadItem = () => {
   };
 
   return (
-    // Centered container for upload form
-    <div style={{ padding: "2rem", maxWidth: "600px", margin: "0 auto" }}>
+    // ✨ Wrap in motion.div to animate mount/unmount
+    <motion.div
+      style={{ padding: "2rem", maxWidth: "600px", margin: "0 auto" }}
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -30 }}
+      transition={{ duration: 0.4 }}
+    >
       <h2>Sell Your Item</h2>
       <form onSubmit={handleSubmit}>
         {/* Title input field */}
@@ -90,7 +96,7 @@ const UploadItem = () => {
           Post Item
         </button>
       </form>
-    </div>
+    </motion.div>
   );
 };
 

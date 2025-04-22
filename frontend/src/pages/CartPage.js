@@ -1,8 +1,10 @@
+// src/pages/CartPage.js
 import React, { useContext } from "react";
 import { CartContext } from "../context/CartContext";
 import { FaShoppingCart } from "react-icons/fa"; // Shopping cart icon
 import { mediaURL } from "../api/api"; // Image base URL
 import "../styles/CartPage.css"; // Component styles
+import { motion } from "framer-motion";
 
 // Main cart page component
 const CartPage = () => {
@@ -29,7 +31,14 @@ const CartPage = () => {
   const total = subtotal + shipping + tax;
 
   return (
-    <div className="cart-page-container">
+    // ✨ Wrap in motion.div for animations
+    <motion.div
+      className="cart-page-container"
+      initial={{ opacity: 0, x: -50 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: 50 }}
+      transition={{ duration: 0.4 }}
+    >
       {/* Page header with icon */}
       <div className="cart-header">
         <h1 className="cart-header-title">
@@ -148,7 +157,7 @@ const CartPage = () => {
           </div>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 };
 

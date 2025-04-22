@@ -2,16 +2,11 @@
 import React, { useState, useEffect, useContext, useMemo } from "react";
 import { CartContext } from "../context/CartContext";
 import ARTryOn3D from "../components/ARTryOn3D";
-import SkeletonLoader from "../components/SkeletonLoader"; // Import SkeletonLoader
+import SkeletonLoader from "../components/SkeletonLoader";
 import { fetchProducts, mediaURL } from "../api/api";
 import "../styles/Dashboard.css";
 
-// Dashboard component
-// Displays a list of products fetched from the API
-// Allows users to add products to their cart
-// Allows users to try on products using AR
-// Includes a search bar to filter products by name
-
+import { motion } from "framer-motion";
 
 const Dashboard = ({ onLogout }) => {
   const [products, setProducts] = useState([]);
@@ -20,7 +15,6 @@ const Dashboard = ({ onLogout }) => {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
 
-  // Fetch products from the API
   useEffect(() => {
     const loadProducts = async () => {
       try {
@@ -36,29 +30,31 @@ const Dashboard = ({ onLogout }) => {
 
     loadProducts();
   }, [searchTerm]);
-
-  // Filter products based on search term
-  const filteredProducts = useMemo(() => {
-    return products.filter((product) =>
-      product.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  }, [products, searchTerm]);
+// filter products
+  const filteredProducts = useMemo(
+    () =>
+      products.filter((product) =>
+        product.name.toLowerCase().includes(searchTerm.toLowerCase())
+      ),
+    [products, searchTerm]
+  );
 
   const handleAddToCart = (product) => {
     addToCart(product);
     alert(`${product.name} added to cart!`);
   };
 
-  const handleTryOn = (product) => {
-    setSelectedProduct(product);
-  };
-
-  const handleCloseAR = () => {
-    setSelectedProduct(null);
-  };
-
+  const handleTryOn = (product) => setSelectedProduct(product);
+  const handleCloseAR = () => setSelectedProduct(null);
+// AR Try On with dashboard Sizing.
   return (
-    <div className="dashboard">
+    <motion.div
+      className="dashboard"
+      initial={{ opacity: 0, x: 50 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: -50 }}
+      transition={{ duration: 0.5 }}
+    >
       {/* Hero Section with Background Image */}
       <div className="dashboard-hero">
         <h1 className="dashboard-title">InstaFit: Your Fashion Marketplace</h1>
@@ -81,7 +77,6 @@ const Dashboard = ({ onLogout }) => {
         </div>
       </div>
 
-      {/* Render skeleton loader if loading */}
       {loading ? (
         <SkeletonLoader count={12} />
       ) : (
@@ -122,11 +117,14 @@ const Dashboard = ({ onLogout }) => {
         </div>
       )}
 
-      {/* Render AR try-on if a product is selected */}
       {selectedProduct && (
-        <ARTryOn3D product={selectedProduct} onClose={handleCloseAR} mediaURL={mediaURL} />
+        <ARTryOn3D
+          product={selectedProduct}
+          onClose={handleCloseAR}
+          mediaURL={mediaURL}
+        />
       )}
-    </div>
+    </motion.div>
   );
 };
 
