@@ -1,97 +1,81 @@
-// src/pages/UploadItem.js
+import React, { useState, useEffect } from "react";
+import "../styles/UserProfile.css";
 
-// Import dependencies
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+const UserProfile = ({ user }) => {
 
-// UploadItem component for selling products
-const UploadItem = () => {
-  // Form field state values
-  const [title, setTitle] = useState("");
-  const [price, setPrice] = useState("");
-  const [description, setDescription] = useState("");
-  const [imageFile, setImageFile] = useState(null);
+  const [purchases, setPurchases] = useState([]);
+  const [itemsPosted, setItemsPosted] = useState([]);
+  const [itemsSold, setItemsSold] = useState([]);
 
-  // Router hook for redirection
-  const navigate = useNavigate();
-
-  // Handle form submission logic
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Simulate item upload process
-    console.log("Item posted:", { title, price, description, imageFile });
-    alert("Your item has been posted for sale!");
-    navigate("/"); // Redirect to homepage
-  };
-
-  // Handle image file selection
-  const handleFileChange = (e) => {
-    setImageFile(e.target.files[0]);
-  };
+  useEffect(() => {
+    // Simulate fetching data for the user.
+    setPurchases([
+      { id: 101, name: "Red T-Shirt", price: 20.0 },
+      { id: 102, name: "Wizard Hat", price: 30.0 },
+    ]);
+    setItemsPosted([
+      { id: 201, name: "Victorian Dress", price: 50.0 },
+      // Add more items as needed.
+    ]);
+    setItemsSold([
+      { id: 301, name: "Old Jacket", price: 25.0 },
+      // Add more items as needed.
+    ]);
+  }, [user]);
 
   return (
-    // Centered container for upload form
-    <div style={{ padding: "2rem", maxWidth: "600px", margin: "0 auto" }}>
-      <h2>Sell Your Item</h2>
-      <form onSubmit={handleSubmit}>
-        {/* Title input field */}
-        <div style={{ marginBottom: "1rem" }}>
-          <label htmlFor="title">Item Title:</label>
-          <input
-            id="title"
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
-            style={{ width: "100%", padding: "0.5rem" }}
-          />
-        </div>
+    <div className="profile-container">
+      <h1 className="profile-header">User Profile: {user}</h1>
 
-        {/* Price input field */}
-        <div style={{ marginBottom: "1rem" }}>
-          <label htmlFor="price">Price:</label>
-          <input
-            id="price"
-            type="number"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
-            required
-            style={{ width: "100%", padding: "0.5rem" }}
-          />
-        </div>
+      <section className="profile-section">
+        <h2 className="section-title">Purchases</h2>
+        {purchases.length > 0 ? (
+          <ul className="profile-list">
+            {purchases.map((item) => (
+              <li key={item.id} className="profile-list-item">
+                <span className="item-name">{item.name}</span>
+                <span className="item-price">${item.price.toFixed(2)}</span>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="empty-message">No purchases yet.</p>
+        )}
+      </section>
 
-        {/* Description textarea */}
-        <div style={{ marginBottom: "1rem" }}>
-          <label htmlFor="description">Description:</label>
-          <textarea
-            id="description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            required
-            style={{ width: "100%", padding: "0.5rem" }}
-          />
-        </div>
+      <section className="profile-section">
+        <h2 className="section-title">Items Posted</h2>
+        {itemsPosted.length > 0 ? (
+          <ul className="profile-list">
+            {itemsPosted.map((item) => (
+              <li key={item.id} className="profile-list-item">
+                <span className="item-name">{item.name}</span>
+                <span className="item-price">${item.price.toFixed(2)}</span>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="empty-message">You haven't posted any items yet.</p>
+        )}
+      </section>
 
-        {/* File input for product image */}
-        <div style={{ marginBottom: "1rem" }}>
-          <label htmlFor="image">Image:</label>
-          <input
-            id="image"
-            type="file"
-            onChange={handleFileChange}
-            accept="image/*"
-            required
-            style={{ width: "100%" }}
-          />
-        </div>
-
-        {/* Submit button to post item */}
-        <button type="submit" style={{ padding: "0.5rem 1rem" }}>
-          Post Item
-        </button>
-      </form>
+      <section className="profile-section">
+        <h2 className="section-title">Items Sold</h2>
+        {itemsSold.length > 0 ? (
+          <ul className="profile-list">
+            {itemsSold.map((item) => (
+              <li key={item.id} className="profile-list-item">
+                <span className="item-name">{item.name}</span>
+                <span className="item-price">${item.price.toFixed(2)}</span>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="empty-message">You haven't sold any items yet.</p>
+        )}
+      </section>
     </div>
   );
 };
 
-export default UploadItem;
+export default UserProfile;
